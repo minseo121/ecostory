@@ -1,6 +1,6 @@
 import {BrowserRouter, Router, Routes, Route, Switch} from 'react-router-dom';
 import './App.css';
-import Map from './page/Kmap'
+import Map from './components/Kmap'
 
 function App() {
 
@@ -8,7 +8,7 @@ function App() {
   <>
     <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Map/>} />
+          <Route path='/map' element={<Map/>} />
         </Routes>
     </BrowserRouter>
   </>
