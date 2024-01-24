@@ -60,8 +60,13 @@ function Kmap() {
         })
 
     return(
-        <div id="map" style={{width:500, height:400}}>
-        </div>
+        <>
+            <div id="map" style={{width:500, height:400}}>
+            </div>
+            <div>
+                폰트 적용이 됐을까요?
+            </div>
+        </>
     )
 };
 export default Kmap;

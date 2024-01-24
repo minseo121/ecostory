@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face{
+  font-family: "Nanum-Bold";
+  src: url(./fonts/NanumSquareNeoOTF-Bd.otf);
+}
+@font-face{
+  font-family: "Nanum-ExBold";
+  src: url(./fonts/NanumSquareNeoOTF-Eb.otf);
+}
+@font-face{
+  font-family: "Nanum-Heavy";
+  src: url(./fonts/NanumSquareNeoOTF-Hv.otf);
+}
+@font-face{
+  font-family: "Nanum-Regular";
+  src: url(./fonts/NanumSquareNeoOTF-Rg.otf);
+}
+@font-face{
+  font-family: "Nanum-Light";
+  src: url(./fonts/NanumSquareNeoOTF-Lt.otf);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -9,6 +30,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  font-family: "Nanum-ExBold"
 }
 
 code {
