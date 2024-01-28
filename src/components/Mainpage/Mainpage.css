@@ -1,13 +1,13 @@
-.mainpage{
-    flex:5;
+/*.mainpage{
     background-color:#ffffff;
+    flex:5;
     padding-top:30px;
     padding-left:4%;
-}
-.box{
+}*/
+/*.box{
     display:flex;
-}
-.title{
+}*/
+/*.title{
     color:#498D80;
     font-weight:bold;
     font-size:30px;
@@ -15,8 +15,8 @@
 
     margin-right:20%;
     margin-bottom:3%;
-}
-.highlight{
+}*/
+/*.highlight{
     color:#61D2A2;
 }
 .tier{
@@ -40,5 +40,5 @@
     height:80%;
     width:95%;
     border-radius:14px;
-    border:7px solid #c9efec;
-}
+    border:7px solid #C9EFEC;
+}*/

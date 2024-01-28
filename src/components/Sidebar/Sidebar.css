@@ -1,10 +1,11 @@
-.sidebar{
-    flex:1; /*사이드바와 메인페이지의 비율. mainpage css에는 flex:4; */
+/*.sidebar{
+    flex:1; //사이드바와 메인페이지의 비율. mainpage css에는 flex:4; 
     background-color:#D3E7DD;
     height:calc(100vh - 60px);
+    //h-[calc(100% - 60px)]
     top:60px
-}
-.profile-frame{
+}*/
+/*.profile-frame{
     background-color:#edf8f3;
     height:35%;
     width:75%;
@@ -16,8 +17,8 @@
     margin-right:auto;
     margin-top:25px;
     margin-bottom:20px;
-}
-.before-login{
+}*/
+/*.before-login{
     color:#498c80;
     font-weight:bold;
     text-align:center;
@@ -28,18 +29,19 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-.profile-img{
+}*/
+/*.profile-img{
     background-color:#ffffff;
     height:50%;
     width:65%;
     border-radius:50%;
+    
     position:absolute;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-.user-info{
+}*/
+/*.user-info{
     display:flex;
     position:absolute;
     top: 70%;
@@ -101,4 +103,4 @@
     cursor: pointer;
     transition: background 0.2s;
     
-}
+}*/
