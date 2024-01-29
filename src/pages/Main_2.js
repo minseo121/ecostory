@@ -3,9 +3,9 @@ import Header from '../components/Header/Header_2';
 import Sidebar from '../components/Sidebar/Sidebar_2';
 import Mainpage from '../components/Mainpage/Mainpage';
 
-function Main() {
+function Main2() {
     return (
-        <div className='main'>
+        <div>
             <Header/>     
             <div className='flex'>
                 <Sidebar/>       
@@ -15,4 +15,4 @@ function Main() {
     );
 }
 
-export default Main;
+export default Main2;
