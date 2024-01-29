@@ -27,13 +27,13 @@ function Kmap() {
         // 지도에 원을 표시합니다 
         yongin.setMap(map); 
 
-        var content =  '<div className="wrap">' + 
+        var content =  '<div className="wrap bg-white">' + 
         '       <div className="info">' + 
         '        <div className="title">' + 
         '            카카오 스페이스닷원' + 
         '            <div className="close" onclick="closeOverlay()" title="닫기"></div>' + 
         '        </div>' + 
-        '        <div className="body" style={{background-color:#fff}}>' + 
+        '        <div className="body">' + 
         '            <div className="img">' +
         '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
         '           </div>' + 

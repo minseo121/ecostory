@@ -3,6 +3,7 @@ import './App.css';
 import Map from './components/Kmap'
 import Main_1 from './pages/Main_1';
 import Main_2 from './pages/Main_2';
+import Login from './pages/Login';
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
           <Route path='/Main1' element={<Main_1/>} />
           <Route path='/Main2' element={<Main_2/>} />
           <Route path='/map' element={<Map/>} />
+          <Route path='/login' element={<Login/>}/>
         </Routes>
     </BrowserRouter>
   </>
