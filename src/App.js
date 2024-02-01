@@ -1,8 +1,8 @@
 import {BrowserRouter, Router, Routes, Route, Switch} from 'react-router-dom';
 import './App.css';
 import Map from './components/Kmap'
-import Main_1 from './pages/Main_1';
-import Main_2 from './pages/Main_2';
+import Main_BeforeLogin from './pages/Main_BeforeLogin';
+import Main_AfterLogin from './pages/Main_AfterLogin';
 import Login from './pages/Login';
 
 function App() {
@@ -11,8 +11,8 @@ function App() {
   <>
     <BrowserRouter>
         <Routes>
-          <Route path='/Main1' element={<Main_1/>} />
-          <Route path='/Main2' element={<Main_2/>} />
+          <Route path='/main1' element={<Main_BeforeLogin/>} />
+          <Route path='/main2' element={<Main_AfterLogin/>} />
           <Route path='/map' element={<Map/>} />
           <Route path='/login' element={<Login/>}/>
         </Routes>

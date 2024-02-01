@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Header from '../components/Header/Header_1';
+import Header from '../components/Header/Header_BeforeLogin';
 import '../css/login.css'
 
 function Login() {

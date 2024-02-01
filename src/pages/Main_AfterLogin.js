@@ -1,9 +1,9 @@
 import react from 'react';
-import Header from '../components/Header/Header_1';
-import Sidebar from '../components/Sidebar/Sidebar_1';
+import Header from '../components/Header/Header_AfterLogin';
+import Sidebar from '../components/Sidebar/Sidebar_AfterLogin';
 import Mainpage from '../components/Mainpage/Mainpage';
 
-function Main1() {
+function Main() {
     return (
         <div>
             <Header/>     
@@ -15,4 +15,4 @@ function Main1() {
     );
 }
 
-export default Main1;
+export default Main;
