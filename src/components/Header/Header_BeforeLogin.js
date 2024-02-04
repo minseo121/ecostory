@@ -1,6 +1,5 @@
 import react from 'react';
 
-
 function Header() {
     return (
         <div className='bg-white flex h-16 w-full drop-shadow-md'>   

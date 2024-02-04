@@ -4,6 +4,7 @@ import Map from './components/Kmap'
 import Main_BeforeLogin from './pages/Main_BeforeLogin';
 import Main_AfterLogin from './pages/Main_AfterLogin';
 import Login from './pages/Login';
+import Profile from './pages/Profile';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route path='/main2' element={<Main_AfterLogin/>} />
           <Route path='/map' element={<Map/>} />
           <Route path='/login' element={<Login/>}/>
+          <Route path='/profile' element={<Profile/>}/>
         </Routes>
     </BrowserRouter>
   </>
