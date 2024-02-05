@@ -25,7 +25,7 @@ function Sidebar() {
             <div className='text-[#589B7F] text-lg ml-[15%]'>이번 주</div>
 
             <div className='bg-[#EDF8F3] h-3/5 w-3/4 drop-shadow-md rounded-3xl mx-auto flex justify-center items-center'>
-                <div className='text-[#589B7F] flex-1 flex-wrap'>
+                <div className='text-[#589B7F] flex-1'>
                     <label htmlFor="all-check" className="mx-auto block text-center my-[10%]">
                         <input type="checkbox" className='content' checked={false} />
                         <span className="ml-2">자전거 타기</span>
