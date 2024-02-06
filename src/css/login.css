@@ -1,0 +1,33 @@
+.login_title{
+    margin-right:24rem;
+}
+
+@media (max-width: 1000px) {
+    .login_title{
+        margin-right:0rem;
+        margin-top:2rem;
+    }
+    .login_title1{
+        font-size: 30px;
+    }
+    .login_content{
+        font-size: 15px;
+        padding:2rem;
+    }
+    .login_form{
+        margin: 5px 5px;
+    }
+    .id_input{
+        padding: 10px;
+        margin : 0px;
+    }
+    .pw_input{
+        padding: 10px;
+        margin : 0px;
+    }
+
+    .btn_input{
+        padding : 15px 50px;
+        font-size: 15px;
+    }
+}

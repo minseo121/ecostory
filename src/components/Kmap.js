@@ -61,11 +61,8 @@ function Kmap() {
 
     return(
         <>
-            <div id="map" style={{width:500, height:400}}>
-            </div>
-            <div>
-                폰트 적용이 됐을까요?
-            </div>
+            <div id="map" className="h-[85%] rounded-xl border-8 border-C9EFEC">
+                </div>
         </>
     )
 };
