@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import Header from '../components/Header/Header_AfterLogin';
-import Modal from '../components/PostModal';
+import Modal from '../components/Modal/PostModal';
 
 function Profile() {
     const [modalOpen, setModal] = useState(false);
@@ -22,7 +22,10 @@ function Profile() {
                 </div>
 
                 <div className=''>
-                    <button onClick={()=>{setModal(true)}}>모달창 열기</button>
+                    <button onClick={()=>{setModal(true); document.body.style.overflow = "hidden";}}>
+                        <img className='h-[275px] w-[275px] object-cover' alt='post' src='img/post_img.png'/>
+                    </button>
+
                     {modalOpen === true ? <Modal modalClose={setModal} /> : null}
                 </div>
 
