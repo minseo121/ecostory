@@ -61,7 +61,7 @@ function Kmap() {
 
     return(
         <>
-            <div id="map" className="h-[85%] rounded-xl border-8 border-C9EFEC">
+            <div id="map" className="h-[85%] rounded-xl border-8 border-[#C9EFEC]">
                 </div>
         </>
     )
