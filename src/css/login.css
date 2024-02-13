@@ -30,4 +30,16 @@
         padding : 15px 50px;
         font-size: 15px;
     }
+    /*signup*/
+    .signup_content{
+        font-size: 15px;
+        margin-top: 3rem;
+        padding:2rem;
+    }
+    .sbtn_input{
+        font-size: 15px;
+        padding: 5px 20px;
+        margin:0px;
+        margin-left:10px;
+    }
 }

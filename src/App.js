@@ -5,6 +5,7 @@ import Main_BeforeLogin from './pages/Main_BeforeLogin';
 import Main_AfterLogin from './pages/Main_AfterLogin';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import SignUp from './pages/SignUp';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route path='/map' element={<Map/>} />
           <Route path='/login' element={<Login/>}/>
           <Route path='/profile' element={<Profile/>}/>
+          <Route path='/signup' element={<SignUp/>}/>
         </Routes>
     </BrowserRouter>
   </>

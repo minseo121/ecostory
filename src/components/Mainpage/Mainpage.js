@@ -4,7 +4,7 @@ import Kmap from "../Kmap"
 function Mainpage() {
     return (
         <div className='bg-white basis-5/6 mt-8 mx-[3%]'>
-            <div className='flex mb-10'>
+            <div className='flex mb-[2%]'>
                 <div className='text-[#498D80] text-3xl float-left my-auto mr-[20%]'>
                     우리 <span className='text-[#61D2A2]'>자연 환경 지수</span> 구경
                 </div>
