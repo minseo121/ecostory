@@ -8,7 +8,7 @@ function Profile() {
 
     const images = [
         { id: 1, src: 'img/post_img.png' },
-        { id: 2, src: 'img/post_img.png' },
+        { id: 2, src: 'img/post_img1.jpg' },
         { id: 3, src: 'img/post_img.png' },
 
     ];
@@ -67,15 +67,15 @@ function Profile() {
                             </button>
 
                             <button onClick={()=>{setModal(true); document.body.style.overflow = "hidden";}}>
-                                <img className='aspect-square object-cover' alt='post' src='img/post_img.png'/>
+                                <img className='aspect-square object-cover ' alt='post' src='img/post_img.png'/>
                             </button>
 
                             <button onClick={()=>{setModal(true); document.body.style.overflow = "hidden";}}>
-                                <img className='aspect-square object-cover' alt='post' src='img/post_img.png'/>
+                                <img className='aspect-square object-cover ' alt='post' src='img/post_img.png'/>
                             </button>
 
                             <button onClick={()=>{setModal(true); document.body.style.overflow = "hidden";}}>
-                                <img className='aspect-square object-cover' alt='post' src='img/post_img.png'/>
+                                <img className='aspect-square object-cover ' alt='post' src='img/post_img.png'/>
                             </button>
 */}
                         </div>
