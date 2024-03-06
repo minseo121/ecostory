@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 function Modal(props) {
-    const { modalClose } = props;
+    const { modalClose , image } = props;
 
     useEffect(() => {
         const handleOutsideClick = (e) => {
@@ -34,6 +34,7 @@ function Modal(props) {
                 <button className="modal_close text-[#589B7F]" onClick={() => { modalClose(false); document.body.style.overflow = "unset"; }}>
                     X
                 </button>
+                <img className="modal_image" alt="modal_image" src={image.src} />
             </div>
         </div>,
         document.getElementById('modal')
