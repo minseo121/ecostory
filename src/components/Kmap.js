@@ -1,9 +1,11 @@
 import React, {useEffect, useState, useRef} from "react";
+import ReactDOM from "react-dom"; // ReactDOM을 import
+import Modal from "./Modal";
 
 var circleData = [
     {
         center: { lat: 37.8282656, lng: 127.437594 },
-        radius: 10000,
+        radius: 6000,
         strokeWeight: 2,
         strokeColor: '#75B8FA',
         strokeOpacity: 1,
@@ -48,28 +50,11 @@ const Kmap = () => {
                 
                 circle.setMap(map);
 
-                var content =  '<div className="wrap bg-white">' + 
-            '       <div className="info">' + 
-            '        <div className="title">' + 
-            '            카카오 스페이스닷원' + 
-            '            <div className="close" onclick="closeOverlay()" title="닫기"></div>' + 
-            '        </div>' + 
-            '        <div className="body">' + 
-            '            <div className="img">' +
-            '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
-            '           </div>' + 
-            '            <div className="desc">' + 
-            '                <div className="ellipsis">제주특별자치도 제주시 첨단로 242</div>' + 
-            '                <div className="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' + 
-            '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' + 
-            '            </div>' + 
-            '        </div>' + 
-            '    </div>' +    
-            '</div>';
+            /*var overlayContent = <Modal />;
 
             var overlay = new kakao.maps.CustomOverlay({
-                content : content,
-                position : circle.getPosition()
+                content: ReactDOM.renderToString(overlayContent),
+                position: map.getCenter()
             })
 
             kakao.maps.event.addListener(circle, 'click', function(){
@@ -77,7 +62,7 @@ const Kmap = () => {
                 });
             function closeOverlay(){
                 overlay.setMap(null);
-            }
+            }*/
             }
             for (var i = 0; i < circleData.length; i++) {
                 createCircle(map, circleData[i]);

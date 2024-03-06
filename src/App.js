@@ -6,6 +6,8 @@ import Main_AfterLogin from './pages/Main_AfterLogin';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import SignUp from './pages/SignUp';
+import Modal from './components/Modal';
+import ChecklistState from './pages/ChecklistState';
 
 function App() {
 
@@ -19,6 +21,8 @@ function App() {
           <Route path='/login' element={<Login/>}/>
           <Route path='/profile' element={<Profile/>}/>
           <Route path='/signup' element={<SignUp/>}/>
+          <Route path='/modal' element={<Modal/>}/>
+          <Route path='/checkliststate' element={<ChecklistState/>}/>
         </Routes>
     </BrowserRouter>
   </>
