@@ -41,7 +41,7 @@ function Sidebar() {
                 <div className="profile_content flex-1">
                     <div className="profile_img bg-white h-2/3 w-2/3 rounded-full mx-auto mt-[5%]"></div>
                     <div className="profile_info flex justify-center mt-[5%]">
-                        <div className="nickname text-[#589B7F] text-xl mr-1.5">구혜원</div>
+                        <div className="nickname text-[#589B7F] text-xl mr-1.5">신민서</div>
                         <div className="tier max-h-6 max-w-6">
                             <img alt="tier" src="img/icon.png"/>
                         </div>
