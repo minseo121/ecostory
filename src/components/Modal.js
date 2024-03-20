@@ -6,7 +6,7 @@ export default function Modal() {
     const [emission, setEmission] = useState('1'); //쓰레기 배출량
     const [dust, setDust] = useState('1'); //미세먼지
   return (
-    <div className='modal_container bg-[#A9D6C3] rounded-3xl border-[#589B7F] border-8'>
+    <div className='modal_container bg-[#A9D6C3] rounded-3xl border-[#589B7F] border-8 flex justify-center'>
         <div className='flex justify-center align-center text-center mt-2'>
             <div className='ml-2'>
                 <div className='m-8 text-2xl text-white '>수질</div>
