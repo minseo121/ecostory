@@ -1,4 +1,4 @@
-export const circleData = {
+export const mapData = {
     "results" : [
     {
         center: { lat: 37.8282656, lng: 127.437594 },
