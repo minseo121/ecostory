@@ -12,7 +12,7 @@ function Profile() {
         { id: 1, src: 'img/post_img.png' },
         { id: 2, src: 'img/post_img1.jpg' },
         { id: 3, src: 'img/post_img.png' },
-
+        { id: 4, src: 'img/post_img.png' },
     ];
 
     const handleImageClick = (image) => {
@@ -26,7 +26,7 @@ function Profile() {
 
             <Header/>     
 
-            <div className='profile bg-white h-screen mt-16'>
+            <div className='profile bg-white h-full mt-28 mb-16'>
 
                 <div className='profile_container flex flex-col justify-center items-center'>
                     <div className='profile_img h-[150px] w-[150px] mx-auto rounded-full border-4 border-[#A9D6BE]'></div>

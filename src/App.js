@@ -8,6 +8,7 @@ import Profile from './pages/Profile';
 import SignUp from './pages/SignUp';
 import Modal from './components/Modal';
 import ChecklistState from './pages/ChecklistState';
+import Guide from './pages/Guide';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Route path='/signup' element={<SignUp/>}/>
           <Route path='/modal' element={<Modal/>}/>
           <Route path='/checkliststate' element={<ChecklistState/>}/>
+          <Route path='/guide' element={<Guide/>}/>
         </Routes>
     </BrowserRouter>
   </>
