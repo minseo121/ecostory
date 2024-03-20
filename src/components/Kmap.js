@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom"; // ReactDOM을 import
 import Modal from "./Modal";
 
@@ -26,55 +26,45 @@ var circleData = [
 ];
 
 const Kmap = () => {
-        const mapContainer = useRef(null); //지도를 담을 영역의 DOM 레퍼런스
-        const { kakao } = window;
-        const mapOptions = { //지도를 생성할 때 필요한 기본 옵션
+    const mapContainer = useRef(null); //지도를 담을 영역의 DOM 레퍼런스
+    const { kakao } = window;
+    const mapOptions = { //지도를 생성할 때 필요한 기본 옵션
         center: new kakao.maps.LatLng(37.5609337, 126.980987), //지도의 중심좌표.
         level: 10 //지도의 레벨(확대, 축소 정도)
-        };
+    };
 
-        useEffect(()=>{
-            const map = new kakao.maps.Map(mapContainer.current, mapOptions); //지도 생성 및 객체 리턴
-            
-            function createCircle(map, circleInfo) {
-                var circle = new kakao.maps.Circle({
-                    center: new kakao.maps.LatLng(circleInfo.center.lat, circleInfo.center.lng),
-                    radius: circleInfo.radius,
-                    strokeWeight: circleInfo.strokeWeight,
-                    strokeColor: circleInfo.strokeColor,
-                    strokeOpacity: circleInfo.strokeOpacity,
-                    strokeStyle: circleInfo.strokeStyle,
-                    fillColor: circleInfo.fillColor,
-                    fillOpacity: circleInfo.fillOpacity
-                });
-                
-                circle.setMap(map);
+    useEffect(() => {
+        const map = new kakao.maps.Map(mapContainer.current, mapOptions); //지도 생성 및 객체 리턴
 
-            /*var overlayContent = <Modal />;
+        function createCircle(map, circleInfo) {
+            var circle = new kakao.maps.Circle({
+                center: new kakao.maps.LatLng(circleInfo.center.lat, circleInfo.center.lng),
+                radius: circleInfo.radius,
+                strokeWeight: circleInfo.strokeWeight,
+                strokeColor: circleInfo.strokeColor,
+                strokeOpacity: circleInfo.strokeOpacity,
+                strokeStyle: circleInfo.strokeStyle,
+                fillColor: circleInfo.fillColor,
+                fillOpacity: circleInfo.fillOpacity
+            });
 
-            var overlay = new kakao.maps.CustomOverlay({
-                content: ReactDOM.renderToString(overlayContent),
-                position: map.getCenter()
-            })
+            circle.setMap(map);
 
-            kakao.maps.event.addListener(circle, 'click', function(){
-                    overlay.setMap(map);
-                });
-            function closeOverlay(){
-                overlay.setMap(null);
-            }*/
-            }
-            for (var i = 0; i < circleData.length; i++) {
-                createCircle(map, circleData[i]);
-            }
-            })
+            kakao.maps.event.addListener(circle, 'click', function () {
+                ReactDOM.render(<Modal />, document.getElementById("modal-root")); // 모달 렌더링
+            });
+        }
 
+        for (var i = 0; i < circleData.length; i++) {
+            createCircle(map, circleData[i]);
+        }
+    }, []);
 
-    return(
+    return (
         <>
-            <div id="map" ref={mapContainer} className="h-[85%] rounded-xl border-8 border-[#C9EFEC]">
-                </div>
+            <div id="map" ref={mapContainer} className="h-[70%] rounded-xl border-8 border-[#C9EFEC]"></div>
+            <div id="modal-root" className="top-20 left-20"></div>
         </>
-    )
+    );
 };
 export default Kmap;
