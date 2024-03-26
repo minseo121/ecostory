@@ -1,69 +1,94 @@
-import React, { useEffect, useRef } from "react";
-import ReactDOM from "react-dom"; // ReactDOM을 import
-import Modal from "./Modal";
+// Kmap.js
 
-var circleData = [
-    {
-        center: { lat: 37.8282656, lng: 127.437594 },
-        radius: 6000,
-        strokeWeight: 2,
-        strokeColor: '#75B8FA',
-        strokeOpacity: 1,
-        strokeStyle: 'solid',
-        fillColor: '#CFE7FF',
-        fillOpacity: 0.5
-    },
-    {
-        center: { lat: 37.6577854, lng: 126.831051 },
-        radius: 8000,
-        strokeWeight: 2,
-        strokeColor: '#f3d75d',
-        strokeOpacity: 1,
-        strokeStyle: 'solid',
-        fillColor: '#f3d75d',
-        fillOpacity: 0.5
-    }
-];
+import React, { useEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom"; 
+import Modal from "./Modal";
+import { mapData } from "./MapData";
 
 const Kmap = () => {
-    const mapContainer = useRef(null); //지도를 담을 영역의 DOM 레퍼런스
+    const mapContainer = useRef(null); 
     const { kakao } = window;
-    const mapOptions = { //지도를 생성할 때 필요한 기본 옵션
-        center: new kakao.maps.LatLng(37.5609337, 126.980987), //지도의 중심좌표.
-        level: 10 //지도의 레벨(확대, 축소 정도)
+    const mapOptions = {
+        center: new kakao.maps.LatLng(37.5609337, 126.980987),
+        level: 10 
     };
 
+    const [showModal, setShowModal] = useState(false);
+    const [mapClickable, setMapClickable] = useState(true); // 지도 클릭 가능 여부 상태
+    const [selectedCircleInfo, setSelectedCircleInfo] = useState(null); // 클릭된 원의 정보 상태
+
     useEffect(() => {
-        const map = new kakao.maps.Map(mapContainer.current, mapOptions); //지도 생성 및 객체 리턴
+        const map = new kakao.maps.Map(mapContainer.current, mapOptions); 
 
         function createCircle(map, circleInfo) {
             var circle = new kakao.maps.Circle({
-                center: new kakao.maps.LatLng(circleInfo.center.lat, circleInfo.center.lng),
-                radius: circleInfo.radius,
-                strokeWeight: circleInfo.strokeWeight,
-                strokeColor: circleInfo.strokeColor,
-                strokeOpacity: circleInfo.strokeOpacity,
-                strokeStyle: circleInfo.strokeStyle,
-                fillColor: circleInfo.fillColor,
-                fillOpacity: circleInfo.fillOpacity
+                center: new kakao.maps.LatLng(circleInfo.Position_x, circleInfo.Position_y),
+                radius: circleInfo.circle,
+                strokeColor: getStrokeColor(circleInfo.Severity),
+                fillColor: getFillColor(circleInfo.Severity),
+                
+                strokeWeight: 2,
+                strokeOpacity: 1,
+                strokeStyle: 'solid',
+                fillOpacity: 0.5
             });
 
             circle.setMap(map);
 
             kakao.maps.event.addListener(circle, 'click', function () {
-                ReactDOM.render(<Modal />, document.getElementById("modal-root")); // 모달 렌더링
+                setSelectedCircleInfo(circleInfo); // 클릭된 원의 정보 저장
+                setShowModal(true);
+                setMapClickable(false); // 모달이 열렸을 때 지도 클릭 비활성화
             });
         }
 
-        for (var i = 0; i < circleData.length; i++) {
-            createCircle(map, circleData[i]);
-        }
+        mapData.results.forEach(circleInfo => {
+            createCircle(map, circleInfo);
+        });
+
+        return () => {
+            // 컴포넌트가 언마운트될 때 클릭 가능 여부를 다시 활성화
+            setMapClickable(true);
+        };
     }, []);
+
+    const closeModal = () => {
+        setShowModal(false);
+        setMapClickable(true); // 모달이 닫혔을 때 지도 클릭 활성화
+    };
+    const getStrokeColor = (severity) => {
+        switch(severity) {
+            case "Very High" : 
+                return "#75B8FA";
+            case "High" :
+                return "#f3d75d";
+            case "Middle" :
+                return "";
+            case "Low" :
+                return "";
+            case "Very Low" :
+                return "";
+        }
+    };
+    const getFillColor = (severity) => {
+        switch(severity) {
+            case "Very High" : 
+                return "#CFE7FF";
+            case "High" :
+                return "#f3d75d";
+            case "Middle" :
+                return "";
+            case "Low" :
+                return "";
+            case "Very Low" :
+                return "";
+        }
+    };
 
     return (
         <>
-            <div id="map" ref={mapContainer} className="h-[70%] rounded-xl border-8 border-[#C9EFEC]"></div>
-            <div id="modal-root" className="top-20 left-20"></div>
+            <div id="map" ref={mapContainer} className="h-[85%] rounded-xl border-8 border-[#C9EFEC]" style={{ pointerEvents: mapClickable ? 'auto' : 'none' }}></div>
+            {showModal && <Modal onClose={closeModal} quality={selectedCircleInfo.Emission_Score.toFixed(2)} emission={selectedCircleInfo.Waste_Score.toFixed(2)} dust={selectedCircleInfo.Air_Score.toFixed(2)} />}
         </>
     );
 };

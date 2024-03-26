@@ -1,24 +1,24 @@
 export const mapData = {
     "results" : [
     {
-        center: { lat: 37.8282656, lng: 127.437594 },
-        radius: 6000,
-        strokeWeight: 2,
-        strokeColor: '#75B8FA',
-        strokeOpacity: 1,
-        strokeStyle: 'solid',
-        fillColor: '#CFE7FF',
-        fillOpacity: 0.5
+        Position_x:37.51803970336914,
+        Position_y:127.5792007446289,
+        circle: 6000,
+        Emission_Score:0.23478999733924866,
+        Waste_Score:0.30000001192092896,
+        Air_Score: 0.12099000066518784,
+        Total_Score:0.655780017375946,
+        Severity : "Very High",
     },
     {
-        center: { lat: 37.6577854, lng: 126.831051 },
-        radius: 8000,
-        strokeWeight: 2,
-        strokeColor: '#f3d75d',
-        strokeOpacity: 1,
-        strokeStyle: 'solid',
-        fillColor: '#f3d75d',
-        fillOpacity: 0.5
+        Position_x:37.6577854,
+        Position_y:126.831051,
+        circle : 8000,
+        Emission_Score:0.15222,
+        Waste_Score:0.30555,
+        Air_Score: 0.8475555,
+        Total_Score:0.96555,
+        Severity : "High",
     }
     ]
 }
