@@ -1,16 +1,53 @@
 import react from 'react';
+import React, { useState } from 'react';
+
+function GuideContent() {
+    return(
+        <div className='flex bg-white h-16 w-full drop-shadow-md rounded-3xl px-10'>
+            <div className='my-auto'>
+                자전거 타기
+            </div>
+            <div className='my-auto ml-auto'>
+                <label className="relative flex items-center py-2 mr-2 rounded-full cursor-pointer" htmlFor="customStyle">
+                    <input type="checkbox"
+                    className="before:content[''] peer relative h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-[#C3E0D1] bg-white transition-all checked:border-[#C3E0D1] checked:bg-[#C3E0D1] hover:scale-105"
+                    //checked={true}
+                    />
+                    <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
+                        stroke="currentColor" strokeWidth="1">
+                            <path fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd">
+                            </path>
+                        </svg>
+                    </span>
+                </label>
+            </div>
+        </div>
+    );
+}
 
 function GuideBook() {
+    const [selectedCategory, setSelectedCategory] = useState("카테고리");
+
+    const handleCategoryClick = (category) =>{
+        setSelectedCategory(category);
+    }
+
     return (
-        <div className='guidebook flex text-[#589B7F]'>
-            <div className='category_frame bg-[#D3E7DD] h-screen w-[205px] text-lg'>
-                <div className='category bg-[#EDF8F3] relative h-5/6 w-[180px] mx-auto top-24 rounded-2xl drop-shadow-lg'>
-                    <p className='pl-4 pt-5 pb-4'>
-                        카테고리
-                    </p>
+        <div className='guidebook flex text-[#589B7F] h-full'>
+            <div className='category_frame bg-[#D3E7DD] h-screen w-[185px] text-lg'>
+                <div className='category bg-[#EDF8F3] relative h-5/6 w-5/6 mx-auto top-24 rounded-2xl drop-shadow-lg flex flex-col'>
+                    <div className='ml-4 basis-1/12 flex items-center'>
+                        카테고리                        
+                    </div>
 
-                    <div className='category_list bg-white h-5/6 w-[160px] mx-auto rounded-b-lg shadow-inner'>
-
+                    <div className='category_list basis-11/12 bg-white h-full w-11/12 mb-2 mx-auto rounded-b-lg shadow-inner p-5'>
+                        <div className='mb-2'><button onClick={()=>handleCategoryClick("교통")}>교통</button></div>
+                        <div className='mb-2'><button onClick={()=>handleCategoryClick("전기")}>전기</button></div>
+                        <div className='mb-2'><button onClick={()=>handleCategoryClick("냉난방")}>냉난방</button></div>
+                        <div className='mb-2'><button onClick={()=>handleCategoryClick("자원")}>자원</button></div>                                        
                     </div>
                 </div>
             </div>
@@ -36,11 +73,47 @@ function GuideBook() {
                     </div>
                 </div>
 
-                <div className='bg-[#A9D6C3] h-[480px] w-full rounded-3xl shadow-inner'>
-                    <div className='text-xl text-white ml-8 py-[12px]'>교통</div>
-                    <div className='bg-[#EEF9F3] h-[420px] rounded-b-3xl mx-2'>
+                <div className='bg-[#A9D6C3] relative h-[70%] w-full rounded-3xl shadow-inner flex flex-col'>
+                    <div className='category_title text-xl text-white ml-8 py-[12px]'>{selectedCategory}</div>
+                    
+                    <div className='guide_contents_frame relative bg-[#EEF9F3] h-full rounded-b-3xl mx-2 mb-2'>
+                        <div className='absolute h-full w-full overflow-auto'>
+                            <div className='m-7 grid grid-cols-2 gap-x-10 gap-y-5 justify-items-center'>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
+                                <GuideContent/>
 
+
+
+                            </div>
+                            <div className='text-center my-8'>
+                                <button className='bg-[#C3E0D1] rounded-full'>+ 가이드 더보기</button>
+                            </div>
+                        </div>
+                        
                     </div>
+                </div>
+
+                <div className='text-center py-7'>
+                    <div>
+                        <button className="bg-[#61D2A2] h-[55px] w-[270px] text-white text-xl py-2 px-4 rounded-xl">
+                            이번 달 목표에 넣기
+                        </button>
+                    </div>
+                    <p className='text-sm text-[#8E8E8E] mt-2'>체크 표시된 회색 선택지는 이미 추가된 목표예요!</p>
                 </div>
                 
             </div>
