@@ -1,4 +1,5 @@
 import {BrowserRouter, Router, Routes, Route, Switch} from 'react-router-dom';
+import React, { useState } from 'react';
 import './App.css';
 import Map from './components/Kmap'
 import Main_BeforeLogin from './pages/Main_BeforeLogin';
@@ -14,13 +15,13 @@ import PlanMain from './pages/PlanMain';
 
 
 function App() {
-
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   return (
   <>
     <BrowserRouter>
         <Routes>
-          <Route path='/main1' element={<Main_BeforeLogin/>} />
-          <Route path='/main2' element={<Main_AfterLogin/>} />
+          <Route path='/' element={isLoggedIn ? <Main_AfterLogin /> : <Main_BeforeLogin />} />
+          <Route path='/loginnot' element={<Main_BeforeLogin />} />
           <Route path='/map' element={<Map/>} />
           <Route path='/login' element={<Login/>}/>
           <Route path='/profile' element={<Profile/>}/>
