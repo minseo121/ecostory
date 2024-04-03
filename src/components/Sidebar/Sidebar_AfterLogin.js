@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 
 function DevideLine() {
     return(
@@ -8,7 +8,7 @@ function DevideLine() {
 
 function CheckList() {
     return(
-        <div className="mx-auto my-[6px] text-center">
+        <div className="mx-auto py-[2%] text-center">
             <div className="inline-flex items-center ">
                 <label className="relative flex items-center py-2 mr-2 rounded-full cursor-pointer" htmlFor="customStyle">
                     <input type="checkbox"
@@ -33,50 +33,53 @@ function CheckList() {
     );
 }
 
-
 function Sidebar() {
     return (
-        <div className="sidebar bg-[#D3E7DD] basis-[185px] h-screen">
-            <div className="profile_frame bg-[#EDF8F3] h-[22%] w-5/6 top-14 drop-shadow-md rounded-3xl relative flex mx-auto mt-6 mb-[90px]">
-                <div className="profile_content flex-1">
-                    <div className="profile_img bg-white h-2/3 w-2/3 rounded-full mx-auto mt-2"></div>
-                    <div className="profile_info flex justify-center mt-[5%]">
-                        <div className="nickname text-[#589B7F] text-lg mr-1.5">신민서</div>
-                        <div className="tier max-h-6 max-w-6">
-                            <img alt="tier" src="img/icon.png"/>
+        <div className="sidebar bg-[#D3E7DD] w-[185px] h-screen pt-14 fixed">
+                <div className='h-[5%]'/>
+
+                <div className="profile_frame bg-[#EDF8F3] h-1/4 w-5/6 drop-shadow-md rounded-3xl relative flex mx-auto">
+                    <div className="profile_content flex-1">
+                        <div className="profile_img bg-white h-2/3 w-2/3 rounded-full mx-auto mt-2"></div>
+                        <div className="profile_info flex justify-center mt-[5%]">
+                            <div className="nickname text-[#589B7F] text-lg mr-1.5">신민서</div>
+                            <div className="tier max-h-6 max-w-6">
+                                <img alt="tier" src="img/icon.png"/>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div className="thisweek text-[#589B7F] text-lg ml-[15%]">이번 주</div>
 
-            <div className="checklist bg-[#EDF8F3] h-[55%] w-5/6 drop-shadow-md rounded-3xl mx-auto flex justify-center items-center">
-                <div className="list_container text-[#589B7F] flex-1">
+                <div className='h-[5%]'/>
 
-                    <CheckList/>
-                    <DevideLine/>
+                <div className="thisweek text-[#589B7F] text-lg ml-[15%]">이번 주</div>
+                <div className="checklist bg-[#EDF8F3] h-[55%] w-5/6 drop-shadow-md rounded-3xl mx-auto flex justify-center items-center">
+                    <div className="list_container text-[#589B7F] flex-1">
+
+                        <CheckList/>
+                        <DevideLine/>
 
 
-                    <CheckList/>
-                    <DevideLine/>
+                        <CheckList/>
+                        <DevideLine/>
 
-                    <CheckList/>
-                    <DevideLine/>
+                        <CheckList/>
+                        <DevideLine/>
 
-                    <CheckList/>
-                    <DevideLine/>
+                        <CheckList/>
+                        <DevideLine/>
 
-                    <CheckList/>
-                    <DevideLine/>
+                        <CheckList/>
+                        <DevideLine/>
 
-                    <CheckList/>
-                    <DevideLine/>
+                        <CheckList/>
+                        <DevideLine/>
 
-                    <CheckList/>
+                        <CheckList/>
 
+                    </div>
                 </div>
-            </div>
+            
         </div>
     );
 }
