@@ -1,5 +1,6 @@
 import "../css/Checklist.css";
 import React from 'react';
+import { planData } from "./data/PlanData";
 
 function DevideLine({ color = "#A9D6C3" }) {
     return(
@@ -7,7 +8,7 @@ function DevideLine({ color = "#A9D6C3" }) {
      );
 }
 
-function SuccessList() {
+function SuccessList({ weekData }) {
     return(
         <div className="">
             <div className="inline-flex items-center ">
@@ -19,9 +20,12 @@ function SuccessList() {
                     </svg>
                     </div>
                 </label>
+                {weekData.results.map((goal, index) => (
                 <span className="mt-px cursor-pointer select-none text-[#589B7F]">
-                    자전거 타기
+                    {goal}
                 </span>
+                 ))}
+                <DevideLine/>
             </div>
         </div>
     );
@@ -41,6 +45,7 @@ function FailList() {
                 <span className="mt-px cursor-pointer select-none text-[#8E8E8E]">
                     자전거 타기
                 </span>
+                <DevideLine color="#D9D9D9"/>
             </div>
         </div>
     );
@@ -64,21 +69,19 @@ const Checklist = () => {
                         <div className='ml-10 bg-[#A9D6BE] w-1/2 mr-10 p-2 rounded-xl'>
                             <p className='p-2 text-xl text-white pt-4 pl-4'>성공목록</p>
                             <div className='Successlist w-full bg-white my-2 rounded-xl overflow-y-auto h-64'>
-                                <SuccessList/>
-                                <DevideLine/>
-                                <SuccessList/>
-                                <DevideLine/>
-                                <SuccessList/>
+                                {Object.entries(planData).map(([week, data], index)=>(
+                                    <SuccessList key={index} weekData={{title:week, results: Object.values(data[0])}}/>
+                                ))}
                             </div>
                         </div>
                         <div className='mr-10 bg-[#ADADAD] w-1/2 ml-10 p-2 rounded-xl'>
                             <p className='p-2 text-xl text-white pt-4 pl-4'>실패목록</p>
                             <div className='faillist w-full bg-white my-2 rounded-xl overflow-y-auto h-64'>
-                                <FailList/>
-                                <DevideLine color="#D9D9D9"/>
-                                <FailList/>
-                                <DevideLine color="#D9D9D9"/>
-                                <FailList/>
+                                    <FailList/>
+                                    <FailList/>
+                                    <FailList/>
+                                    <FailList/>
+                                    <FailList/>
                             </div>
                         </div>
                     </div>

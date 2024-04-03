@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom"; 
 import Modal from "./Modal";
-import { mapData } from "./MapData";
+import { mapData } from "./data/MapData";
 
 const Kmap = () => {
     const mapContainer = useRef(null); 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { planData } from './data/PlanData';
 
 function Checkbox() {
  return(
@@ -20,50 +21,58 @@ function Checkbox() {
  );
 }
 
-function SuccessList() {
-    return(
+function PlanList({ weekData }) {
+    return (
         <div className='w-full'>
-            <div className='p-5 border-[3px] border-[#A9D6C3] rounded-2xl bg-[#FAFDFC] shadow-md'>
-                <p className='pb-5'>1월 1주차</p>
+             <div className={`p-5 border-[3px] border-[#A9D6C3] rounded-2xl shadow-md ${weekData.isPastWeek ? 'bg-gray-200' : ''}`}>
+                <p className='pb-5'>{weekData.title}</p>
                 <ul className='px-4 pb-5'>
-                    <li className='mt-3 flex justify-between'>
-                        <p className=''>3km 걷기</p>
-                        <Checkbox/>
-                    </li>
-                    <li className='mt-3 flex justify-between'>
-                        <p className=''>3km 걷기</p>
-                        <Checkbox/>
-                    </li>
-                    <li className='mt-3 flex justify-between'>
-                        <p className=''>3km 걷기</p>
-                        <Checkbox/>
-                    </li>
-                    <li className='mt-3 flex justify-between'>
-                        <p className=''>3km 걷기</p>
-                        <Checkbox/>
-                    </li>
-                    <li className='mt-3 flex justify-between'>
-                        <p className=''>3km 걷기</p>
-                        <Checkbox/>
-                    </li>
+                    {weekData.results.map((goal, index) => (
+                        <li className='mt-3 flex justify-between' key={index}>
+                            <p className=''>{goal}</p>
+                            <Checkbox />
+                        </li>
+                    ))}
                 </ul>
             </div>
         </div>
     );
 }
+const getCurrentMonthData = () => {
+    const currentMonth = new Date().getMonth() + 1; 
+
+    return Object.entries(planData).filter(([key]) => {
+        const month = key.split(' ')[0];
+        return parseInt(month) === currentMonth;
+    });
+};
+const getCurrentWeekData = () => {
+    const currentWeek = new Date().getDate() + 1; 
+
+    return Object.entries(planData).filter(([key]) => {
+        const week = key.split(' ')[1];
+        const isPastWeek = parseInt(week) < currentWeek;
+
+        return {
+            key,
+            isPastWeek
+        };
+    });
+};
+
 const Plan = () => {
+    const currentMonthData = getCurrentMonthData();
+    const currentWeekData = getCurrentWeekData();
     return (
-        <div className='m-16 text-[#498D80] w-full'>
+        <div className='m-16 text-[#498D80] w-full mt-28'>
             <div>
                 <p className='text-3xl'>이번 달 <span className='text-[#61D2A2]'>실천 계획</span></p>
                 <p className='my-2'>삭제하고 싶은 목록을 체크 후 저장 시, 해당 목록이 삭제된 후 적용됩니다</p>
             </div>
-            <div className='grid grid-cols-1 m-2 mt-8 gap-10
-                            md:grid-cols-3'>
-                <SuccessList/>
-                <SuccessList/>
-                <SuccessList/>
-                <SuccessList/>
+            <div className='grid grid-cols-1 m-2 mt-8 gap-10 md:grid-cols-3'>
+                {currentMonthData.map(([week, data], index) => (
+                    <PlanList key={index} weekData={{ title: week, results: Object.values(data[0])}}/>
+                ))}
             </div>
         </div>
     );
