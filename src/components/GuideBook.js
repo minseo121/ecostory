@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { guideData } from "./GuideData";
 import { moreGuideData } from "./MoreGuideData";
+import '../css/Main.css'
 
 function GuideContent({ guideName }) {
     const [isChecked, setIsChecked] = useState(false);
