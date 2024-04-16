@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { guideData } from "./GuideData";
+import { moreGuideData } from "./MoreGuideData";
 
 function GuideContent({ guideName }) {
     const [isChecked, setIsChecked] = useState(false);
@@ -32,13 +33,23 @@ function GuideContent({ guideName }) {
     );
 }
 
-
 function GuideBook() {
-    const [selectedCategory, setSelectedCategory] = useState("카테고리");
     const categories = [...new Set(guideData.guide.map(guide => guide.category_NM))];
+    const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+    //moreGuide 수정하기
+    const [moreGuide, setMoreGuide] = useState(false)
     
     const handleCategoryClick = (categoryName) =>{
         setSelectedCategory(categoryName);
+        setMoreGuide(false);
+    }
+
+    //수정할 코드
+    const handleMoreCategoryClick = () => {
+        setMoreGuide(true);
+        //setTimeout(() => {
+          //  setMoreGuide(false);
+        //}, 0);
     }
 
     return (
@@ -54,9 +65,10 @@ function GuideBook() {
                         <div className='category_list flex-1 bg-white h-full w-11/12 mb-2 mx-auto rounded-b-lg shadow-inner p-5'>
                             {categories.map(category => (
                                 <div className='mb-2' key={category}>
-                                    <button onClick={() => handleCategoryClick(category)}>{category}</button>
+                                    <button className={`${selectedCategory===category?'text-[#589B7F]':'text-[#589B7F]/[.45]'}`} onClick={() => handleCategoryClick(category)}>{category}</button>
                                 </div>
-                            ))}
+                            ))
+                            }
                         </div>
                     </div>
                 </div>
@@ -95,9 +107,19 @@ function GuideBook() {
                                         .map((guide) => (
                                             <GuideContent key={guide.guide_Id} guideName={guide.guide_NM} />
                                         ))}
+
+                                    {/*문제 많은 코드. 수정해야함*/}
+                                    {moreGuide?
+                                        moreGuideData.data                                            
+                                            .map((data) => (
+                                                <GuideContent key={data.guide_Id} guideName={data.guide_NM} />
+                                            ))
+                                        : null}
+
                                 </div>
                                 <div className='text-center my-8'>
-                                    <button className={`bg-[#C3E0D1] rounded-full px-3 py-1 ${selectedCategory === "카테고리" ? 'invisible' : null}`}>+ 가이드 더보기</button>
+                                    {/* onclick 함수 수정하기-> true로 설정하면 다시 false로 변환하기*/}
+                                    <button className='bg-[#C3E0D1] rounded-full px-3 py-1' onClick={() => handleMoreCategoryClick()}>+ 가이드 더보기</button>
                                 </div>
                             </div>
                                         

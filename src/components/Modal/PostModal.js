@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 function Modal(props) {
-    const { modalClose , image } = props;
+    const { modalClose , image , text} = props;
 
     useEffect(() => {
         const handleOutsideClick = (e) => {
@@ -51,17 +51,14 @@ function Modal(props) {
                     <div className="devideline w-[465px] my-4 border-2 border-[#A9D6C3]"/>
 
                     <div className='post_content overflow-y-auto text-lg h-[455px] w-[460px] mx-auto'>
- 
-                        <div>너 그거 알아? 귀여운 사람을 보면 기억을 잃는대 말이 돼?ㅋㅋㅋㅋ</div>
-                        <div>너 그거 알아? 귀여운 사람을 보면 기억을 잃는대 말이 돼?ㅋㅋㅋㅋ</div>
-                        <div>너 그거 알아? 귀여운 사람을 보면 기억을 잃는대 말이 돼?ㅋㅋㅋㅋ</div>
-                        <div>너 그거 알아? 귀여운 사람을 보면 기억을 잃는대 말이 돼?ㅋㅋㅋㅋ</div>
-                        <div>너 그거 알아? 귀여운 사람을 보면 기억을 잃는대 말이 돼?ㅋㅋㅋㅋ</div>
-                        <div>너 그거 알아? 귀여운 사람을 보면 기억을 잃는대 말이 돼?ㅋㅋㅋㅋ</div>
-                        <div>너 그거 알아? 귀여운 사람을 보면 기억을 잃는대 말이 돼?ㅋㅋㅋㅋ</div>
-                        <div>너 그거 알아? 귀여운 사람을 보면 기억을 잃는대 말이 돼?ㅋㅋㅋㅋ</div>
-                        <div>너 그거 알아? 귀여운 사람을 보면 기억을 잃는대 말이 돼?ㅋㅋㅋㅋ</div>
-
+                        {text.split('\n').map(line => {
+                            return (
+                                <>
+                                    {line}
+                                    <br/>
+                                </>
+                            );})
+                        }
                     </div>
 
                 </div>

@@ -47,14 +47,29 @@ function Header() {
 
                 {/* 드롭다운 메뉴 */}
                 {isDropdownOpen && (
-                    <ul className="absolute w-full top-0 left-0 mt-14 bg-white rounded-b-lg drop-shadow-md">
-                        <li>
-                            <a className="block py-2 px-4 text-[#498D80]" href="#">로그인</a>
-                        </li>
-                        <li>
-                            <a className="block py-2 px-4 text-[#498D80]" href="#">회원가입</a>
-                        </li>
-                    </ul>
+                    <div className="absolute w-full top-0 left-0 mt-14 bg-white rounded-b-lg drop-shadow-md text-[#498D80]">
+                        <form className="loginform mt-4 px-[7%]">
+                            <div className="">
+                                <p className="pl-1">아이디</p>
+                                <input type="text" className="input_id border-[3px] border-[#7BB49C] bg-[#EEF9F3] h-11 w-full my-2 p-4 px-5 rounded-xl" />
+                            </div>
+                            <div>
+                                <p className="pl-1">비밀번호</p>
+                                <input type="password" className="input_pw border-[3px] border-[#7BB49C] bg-[#EEF9F3] h-11 w-full my-2 p-4 px-5 rounded-xl" />
+                            </div>
+                            <div className="flex items-center mb-1 text-xs">
+                                <input type="checkbox"></input>
+                                <label className="ml-3">로그인 상태 유지하기</label>
+                            </div>
+                            <div className="flex justify-end text-white mt-1 h-10"> 
+                                <input type="button" value="로그인" className="login_btn bg-[#7BB49C] rounded-xl px-9"/>                                
+                            </div>
+                            <div className="flex justify-end mb-8 text-xs pr-1 pt-2"> 
+                                <span className='text-[#A9D6C3]'>아이디가 없다면?&nbsp;</span>
+                                <a className="text-[#498D80]" href="#">회원가입하기</a>
+                            </div>                            
+                        </form>
+                    </div>
                 )}
                 {/* 데스크톱 화면에서는 바로 로그인과 회원가입 표시 */}
                 <ul className="hidden md:flex list-none pr-12 my-auto">

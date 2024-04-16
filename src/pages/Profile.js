@@ -2,23 +2,25 @@ import {useState} from 'react';
 import Header from '../components/Header/Header_AfterLogin';
 import Modal from '../components/Modal/PostModal';
 import PostingModal from '../components/Modal/PostingModal';
+import { postData } from '../components/PostData.js';
 
 function Profile() {
     const [modalOpen, setModal] = useState(false);
     const [PostingModalOpen, setPostingModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedText, setSelectedText] = useState("");
 
-    const images = [
-        { id: 1, src: 'img/post_img.png' },
-        { id: 2, src: 'img/post_img1.jpg' },
-        { id: 3, src: 'img/post_img.png' },
-        { id: 4, src: 'img/post_img.png' },
-    ];
 
     const handleImageClick = (image) => {
         setSelectedImage(image);
+        setSelectedText(findText(image.id));
         setModal(true);
         document.body.style.overflow = "hidden";
+    };
+
+    const findText = (id) => {
+        const post = postData.postData.find(post => post.id === id);
+        return post ? post.text : '';
     };
 
     return (
@@ -57,9 +59,9 @@ function Profile() {
                             {modalOpen === true ? <Modal modalClose={setModal} /> : null}
 */}
 
-                            {modalOpen && selectedImage && <Modal image={selectedImage} modalClose={setModal} />}
+                            {modalOpen && selectedImage && <Modal image={selectedImage} text={selectedText} modalClose={setModal} />}
 
-                            {images.map(image => (
+                            {postData.postData.map(image => (
                                 <button key={image.id} onClick={() => handleImageClick(image)}>
                                     <img className='aspect-square object-cover' alt='post' src={image.src}/>
                                 </button>
