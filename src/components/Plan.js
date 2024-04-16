@@ -64,9 +64,9 @@ const Plan = () => {
     const currentMonthData = getCurrentMonthData();
     const currentWeekData = getCurrentWeekData();
     return (
-        <div className='m-16 text-[#498D80] w-full mt-28'>
+        <div className='flex-1 m-8 mt-24 sm:ml-56 sm:m-16 text-[#498D80] w-screen sm:mt-24'>
             <div>
-                <p className='text-3xl'>이번 달 <span className='text-[#61D2A2]'>실천 계획</span></p>
+                <p className='text-2xl'>이번 달 <span className='text-[#61D2A2]'>실천 계획</span></p>
                 <p className='my-2'>삭제하고 싶은 목록을 체크 후 저장 시, 해당 목록이 삭제된 후 적용됩니다</p>
             </div>
             <div className='grid grid-cols-1 m-2 mt-8 gap-10 md:grid-cols-3'>

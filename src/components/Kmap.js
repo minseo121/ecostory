@@ -8,14 +8,38 @@ import { mapData } from "./data/MapData";
 const Kmap = () => {
     const mapContainer = useRef(null); 
     const { kakao } = window;
-    const mapOptions = {
+    const [mapOptions, setMapOptions] = useState({
         center: new kakao.maps.LatLng(37.5609337, 126.980987),
-        level: 10 
-    };
+        level: 10
+    });
 
     const [showModal, setShowModal] = useState(false);
     const [mapClickable, setMapClickable] = useState(true); // 지도 클릭 가능 여부 상태
     const [selectedCircleInfo, setSelectedCircleInfo] = useState(null); // 클릭된 원의 정보 상태
+
+    useEffect(() => {
+        const handleResize = () => {
+            // 화면 너비가 640px 이하라면 중앙 좌표를 변경
+            if (window.innerWidth <= 640) {
+                setMapOptions({
+                    center: new kakao.maps.LatLng(37.6224568, 127.1473852),
+                    level: 10
+                });
+            } else {
+                // 그렇지 않으면 원래의 중앙 좌표로 설정
+                setMapOptions({
+                    center: new kakao.maps.LatLng(37.5609337, 126.980987),
+                    level: 10
+                });
+            }
+        };
+        console.log(mapOptions)
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [window.innerWidth]);
 
     useEffect(() => {
         const map = new kakao.maps.Map(mapContainer.current, mapOptions); 

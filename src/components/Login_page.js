@@ -6,7 +6,7 @@ function Login_page() {
         <>
         <div className="Login bg-[#D3E7DD]">
             <div className="container mx-auto">
-                <div className="login_content w-full bg-white text-[#589B7F] text-lg h-screen flex flex-col justify-center items-center">
+                <div className="login_content w-full bg-white text-[#589B7F] text-lg h-screen flex flex-col justify-center items-center pt-20">
                     <div className="mb-10">
                         <div className="login_title mb-5 mr-24">
                             <p className="login_title1 text-4xl mb-3">로그인</p>

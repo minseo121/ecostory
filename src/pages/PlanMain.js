@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../components/Header/Header_AfterLogin';
 import Sidebar from '../components/Sidebar/Sidebar_AfterLogin';
 import Plan from '../components/Plan';
+import PlanBtn from '../components/PlanBtn';
 
 const PlanMain = () => {
     return (
@@ -11,6 +12,7 @@ const PlanMain = () => {
                 <Sidebar/>       
                 <Plan/>
             </div>
+            <PlanBtn/>
         </div>
     );
 };
