@@ -8,7 +8,7 @@ function Main() {
     return (
         <div>
             <Header/>     
-            <div className='flex'>
+            <div className='flex flex-col sm:flex-row'>
                 <Sidebar/>       
                 <Mainpage/>
             </div>

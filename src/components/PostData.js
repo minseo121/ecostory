@@ -15,6 +15,43 @@ export const postData = {
                 src: 'img/post_img.png',
                 text : "이거 잘 되는거 맞나?\n\n잘 되는거 확인 완료~"
         },
+        {
+                id: 4,
+                src: 'img/post_img.png',
+                text : "이거 잘 되는거 맞나?\n\n잘 되는거 확인 완료~"
+        },
+        {
+                id: 5,
+                src: 'img/post_img.png',
+                text : "이거 잘 되는거 맞나?\n\n잘 되는거 확인 완료~"
+        },
+        {
+                id: 6,
+                src: 'img/post_img.png',
+                text : "이거 잘 되는거 맞나?\n\n잘 되는거 확인 완료~"
+        },
+        {
+                id: 7,
+                src: 'img/post_img.png',
+                text : "이거 잘 되는거 맞나?\n\n잘 되는거 확인 완료~"
+        },
+        {
+                id: 8,
+                src: 'img/post_img.png',
+                text : "이거 잘 되는거 맞나?\n\n잘 되는거 확인 완료~"
+        },
+        {
+                id: 9,
+                src: 'img/post_img.png',
+                text : "이거 잘 되는거 맞나?\n\n잘 되는거 확인 완료~"
+        },
+        {
+                id: 10,
+                src: 'img/post_img.png',
+                text : "이거 잘 되는거 맞나?\n\n잘 되는거 확인 완료~"
+        },
+
+
 
     ]
 }

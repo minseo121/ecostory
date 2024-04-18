@@ -47,9 +47,10 @@ function Header() {
 
                 {/* 드롭다운 메뉴 */}
                 {isDropdownOpen && (
-                    <div className="absolute w-full top-0 left-0 mt-14 bg-white rounded-b-lg drop-shadow-md text-[#498D80]">
+                    <div className="absolute w-full top-0 left-0 mt-14 bg-white rounded-b-3xl drop-shadow-md text-[#498D80]">
+                        <div className='w-1/5 h-1 mx-auto bg-[#C3E0D1]'/>
                         <form className="loginform mt-4 px-[7%]">
-                            <div className="">
+                            <div>
                                 <p className="pl-1">아이디</p>
                                 <input type="text" className="input_id border-[3px] border-[#7BB49C] bg-[#EEF9F3] h-11 w-full my-2 p-4 px-5 rounded-xl" />
                             </div>
