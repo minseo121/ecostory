@@ -8,8 +8,8 @@ function DevideLine() {
 
 function CheckList() {
     return(
-        <div className="mx-auto py-[2%] text-center z-10">
-            <div className="inline-flex items-center ">
+        <div className="mx-auto py-[2%] text-center">
+            <div className="inline-flex items-center">
                 <label className="relative flex items-center py-2 mr-2 rounded-full cursor-pointer" htmlFor="customStyle">
                     <input type="checkbox"
                     className="before:content[''] peer relative h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-[#C3E0D1] bg-white transition-all checked:border-[#C3E0D1] checked:bg-[#C3E0D1] hover:scale-105"

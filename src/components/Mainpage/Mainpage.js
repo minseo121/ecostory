@@ -17,8 +17,8 @@ function Mainpage() {
         };
     }, []);
     return (
-        <div className="mainpage flex-1 bg-white mt-12 sm:pl-[185px] mx-[3%]">
-            <div className='pt-9 h-screen'>
+        <div className="mainpage flex-1 bg-white mt-12 sm:pl-[185px] sm:mx-[3%] max-[640px]:rounded-t-xl max-[640px]:z-10 max-[640]:shadow-3xl">
+            <div className='pt-9 h-screen max-[640px]:mx-3 max-[640px]:mb-16'>
                 <div className="title w-full text-center sm:flex mb-[20px]">
                     <div className="title_content1 text-[#498D80] text-center sm:text-start text-[24px] sm:float-left my-auto sm:mr-[20%]">
                         우리 <span className="highlight text-[#61D2A2]">자연 환경 지수</span> 구경
