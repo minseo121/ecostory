@@ -106,10 +106,10 @@ function Header() {
                                 </div>
 
                                 <div className='flex flex-col justify-center items-center'>                                
-                                    <Link to="/plan"><a className="text-[#498D80] mb-5">체크리스트 만들기</a></Link>                                                                            
-                                    <Link to="/checkliststate"><a className="text-[#498D80] mb-5">체크리스트 현황</a></Link>                                 
-                                    <Link to="/guide"><a className="text-[#498D80] mb-10">가이드북</a></Link>                               
-                                    <div className='w-1/2 h-1 mx-auto bg-[#C3E0D1] mb-5'/>                           
+                                    <Link to="/plan" className="text-[#498D80] mb-5">체크리스트 만들기</Link>
+                                    <Link to="/checkliststate" className="text-[#498D80] mb-5">체크리스트 현황</Link>                          
+                                    <Link to="/guide" className="text-[#498D80] mb-10">가이드북</Link>                             
+                                    <div className='w-1/2 h-1 mx-auto bg-[#C3E0D1] mb-5'/>               
                                     <Link to="/loginnot"><a className="text-[#498D80]">로그아웃</a></Link>                                           
                                 </div>
                                 
