@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { guideData } from "./GuideData";
-import { moreGuideData } from "./MoreGuideData";
 import '../../css/Main.css'
 
 function GuideContent({ guideName }) {
@@ -35,9 +33,157 @@ function GuideContent({ guideName }) {
 }
 
 function GuideBook() {
-    const categories = [...new Set(guideData.guide.map(guide => guide.category_NM))];
-    const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-    const [moreGuide, setMoreGuide] = useState(false);
+    const [guideBookList, setGuideBookList] = useState([
+        {
+            "category_Id": 29,
+            "category_NM": "가정",
+            "guides":[
+                {"guide_Id" : 1, "guide_NM" : "전기를 절약하기 위해 불필요한 전기 용품 끄기"},
+                {"guide_Id" : 2, "guide_NM" : "일회용품 대신 재사용 가능한 용기 사용하기"},
+                {"guide_Id" : 3, "guide_NM" : "가정에서 식재료를 살때 지역 농산물을 구입하기"},
+                {"guide_Id" : 4, "guide_NM" : "급수기 대신 물병이나 잔을 사용하기"},
+                {"guide_Id" : 5, "guide_NM" : "에어컨 대신 환기를 잘 시켜 에너지를 절약하기"},
+                {"guide_Id" : 6, "guide_NM" : "자동차 대신 걷거나 자전거 이용하기"},
+                {"guide_Id" : 7, "guide_NM" : "대중교통을 이용하기"},
+                {"guide_Id" : 8, "guide_NM" : "물 사용량을 줄이기 위해 샤워 시간을 단축하기"},
+            ]
+        },
+        {
+            "category_Id": 16,
+            "category_NM": "먹거리",
+            "guides":[
+                {"guide_Id" : 1, "guide_NM" : "전기를 절약하기 위해 불필요한 전기 용품 끄기"},
+                {"guide_Id" : 2, "guide_NM" : "일회용품 대신 재사용 가능한 용기 사용하기"},
+                {"guide_Id" : 3, "guide_NM" : "가정에서 식재료를 살때 지역 농산물을 구입하기"},
+                {"guide_Id" : 4, "guide_NM" : "급수기 대신 물병이나 잔을 사용하기"},
+                {"guide_Id" : 5, "guide_NM" : "에어컨 대신 환기를 잘 시켜 에너지를 절약하기"},
+                {"guide_Id" : 6, "guide_NM" : "자동차 대신 걷거나 자전거 이용하기"},
+                {"guide_Id" : 7, "guide_NM" : "대중교통을 이용하기"},
+                {"guide_Id" : 8, "guide_NM" : "물 사용량을 줄이기 위해 샤워 시간을 단축하기"},
+            ]
+        },
+        {
+            "category_Id": 31,
+            "category_NM": "사회",
+            "guides":[
+                {"guide_Id" : 1, "guide_NM" : "전기를 절약하기 위해 불필요한 전기 용품 끄기"},
+                {"guide_Id" : 2, "guide_NM" : "일회용품 대신 재사용 가능한 용기 사용하기"},
+                {"guide_Id" : 3, "guide_NM" : "가정에서 식재료를 살때 지역 농산물을 구입하기"},
+                {"guide_Id" : 4, "guide_NM" : "급수기 대신 물병이나 잔을 사용하기"},
+                {"guide_Id" : 5, "guide_NM" : "에어컨 대신 환기를 잘 시켜 에너지를 절약하기"},
+                {"guide_Id" : 6, "guide_NM" : "자동차 대신 걷거나 자전거 이용하기"},
+                {"guide_Id" : 7, "guide_NM" : "대중교통을 이용하기"},
+                {"guide_Id" : 8, "guide_NM" : "물 사용량을 줄이기 위해 샤워 시간을 단축하기"},
+            ]
+        },
+        {
+            "category_Id": 15,
+            "category_NM": "생활",
+            "guides":[
+                {"guide_Id" : 1, "guide_NM" : "전기를 절약하기 위해 불필요한 전기 용품 끄기"},
+                {"guide_Id" : 2, "guide_NM" : "일회용품 대신 재사용 가능한 용기 사용하기"},
+                {"guide_Id" : 3, "guide_NM" : "가정에서 식재료를 살때 지역 농산물을 구입하기"},
+                {"guide_Id" : 4, "guide_NM" : "급수기 대신 물병이나 잔을 사용하기"},
+                {"guide_Id" : 5, "guide_NM" : "에어컨 대신 환기를 잘 시켜 에너지를 절약하기"},
+                {"guide_Id" : 6, "guide_NM" : "자동차 대신 걷거나 자전거 이용하기"},
+                {"guide_Id" : 7, "guide_NM" : "대중교통을 이용하기"},
+                {"guide_Id" : 8, "guide_NM" : "물 사용량을 줄이기 위해 샤워 시간을 단축하기"},
+            ]
+        },
+        {
+            "category_Id": 17,
+            "category_NM": "소비",
+            "guides":[
+                {"guide_Id" : 1, "guide_NM" : "전기를 절약하기 위해 불필요한 전기 용품 끄기"},
+                {"guide_Id" : 2, "guide_NM" : "일회용품 대신 재사용 가능한 용기 사용하기"},
+                {"guide_Id" : 3, "guide_NM" : "가정에서 식재료를 살때 지역 농산물을 구입하기"},
+                {"guide_Id" : 4, "guide_NM" : "급수기 대신 물병이나 잔을 사용하기"},
+                {"guide_Id" : 5, "guide_NM" : "에어컨 대신 환기를 잘 시켜 에너지를 절약하기"},
+                {"guide_Id" : 6, "guide_NM" : "자동차 대신 걷거나 자전거 이용하기"},
+                {"guide_Id" : 7, "guide_NM" : "대중교통을 이용하기"},
+                {"guide_Id" : 8, "guide_NM" : "물 사용량을 줄이기 위해 샤워 시간을 단축하기"},
+            ]
+        },
+        {
+            "category_Id": 33,
+            "category_NM": "쇼핑",
+            "guides":[
+                {"guide_Id" : 1, "guide_NM" : "전기를 절약하기 위해 불필요한 전기 용품 끄기"},
+                {"guide_Id" : 2, "guide_NM" : "일회용품 대신 재사용 가능한 용기 사용하기"},
+                {"guide_Id" : 3, "guide_NM" : "가정에서 식재료를 살때 지역 농산물을 구입하기"},
+                {"guide_Id" : 4, "guide_NM" : "급수기 대신 물병이나 잔을 사용하기"},
+                {"guide_Id" : 5, "guide_NM" : "에어컨 대신 환기를 잘 시켜 에너지를 절약하기"},
+                {"guide_Id" : 6, "guide_NM" : "자동차 대신 걷거나 자전거 이용하기"},
+                {"guide_Id" : 7, "guide_NM" : "대중교통을 이용하기"},
+                {"guide_Id" : 8, "guide_NM" : "물 사용량을 줄이기 위해 샤워 시간을 단축하기"},
+            ]
+        },
+        {
+            "category_Id": 34,
+            "category_NM": "식품",
+            "guides":[
+                {"guide_Id" : 1, "guide_NM" : "전기를 절약하기 위해 불필요한 전기 용품 끄기"},
+                {"guide_Id" : 2, "guide_NM" : "일회용품 대신 재사용 가능한 용기 사용하기"},
+                {"guide_Id" : 3, "guide_NM" : "가정에서 식재료를 살때 지역 농산물을 구입하기"},
+                {"guide_Id" : 4, "guide_NM" : "급수기 대신 물병이나 잔을 사용하기"},
+                {"guide_Id" : 5, "guide_NM" : "에어컨 대신 환기를 잘 시켜 에너지를 절약하기"},
+                {"guide_Id" : 6, "guide_NM" : "자동차 대신 걷거나 자전거 이용하기"},
+                {"guide_Id" : 7, "guide_NM" : "대중교통을 이용하기"},
+                {"guide_Id" : 8, "guide_NM" : "물 사용량을 줄이기 위해 샤워 시간을 단축하기"},
+            ]
+        },
+        {
+            "category_Id": 32,
+            "category_NM": "이동",
+            "guides":[
+                {"guide_Id" : 1, "guide_NM" : "전기를 절약하기 위해 불필요한 전기 용품 끄기"},
+                {"guide_Id" : 2, "guide_NM" : "일회용품 대신 재사용 가능한 용기 사용하기"},
+                {"guide_Id" : 3, "guide_NM" : "가정에서 식재료를 살때 지역 농산물을 구입하기"},
+                {"guide_Id" : 4, "guide_NM" : "급수기 대신 물병이나 잔을 사용하기"},
+                {"guide_Id" : 5, "guide_NM" : "에어컨 대신 환기를 잘 시켜 에너지를 절약하기"},
+                {"guide_Id" : 6, "guide_NM" : "자동차 대신 걷거나 자전거 이용하기"},
+                {"guide_Id" : 7, "guide_NM" : "대중교통을 이용하기"},
+                {"guide_Id" : 8, "guide_NM" : "물 사용량을 줄이기 위해 샤워 시간을 단축하기"},
+            ]
+        },
+        {
+            "category_Id": 30,
+            "category_NM": "일상",
+            "guides":[
+                {"guide_Id" : 1, "guide_NM" : "전기를 절약하기 위해 불필요한 전기 용품 끄기"},
+                {"guide_Id" : 2, "guide_NM" : "일회용품 대신 재사용 가능한 용기 사용하기"},
+                {"guide_Id" : 3, "guide_NM" : "가정에서 식재료를 살때 지역 농산물을 구입하기"},
+                {"guide_Id" : 4, "guide_NM" : "급수기 대신 물병이나 잔을 사용하기"},
+                {"guide_Id" : 5, "guide_NM" : "에어컨 대신 환기를 잘 시켜 에너지를 절약하기"},
+                {"guide_Id" : 6, "guide_NM" : "자동차 대신 걷거나 자전거 이용하기"},
+                {"guide_Id" : 7, "guide_NM" : "대중교통을 이용하기"},
+                {"guide_Id" : 8, "guide_NM" : "물 사용량을 줄이기 위해 샤워 시간을 단축하기"},
+            ]
+        }
+    ]);
+
+    const [newGuides, setNewGuides] = useState([
+        {
+            "guide_Id": 215,
+            "guide_NM": "친환경 단체에 가입하여 활동하기"
+        },
+        {
+            "guide_Id": 220,
+            "guide_NM": "지역 및 봉사 활동에 참여하기"
+        },
+        {
+            "guide_Id": 30,
+            "guide_NM": "동물 보호 시설에서 봉사하기"
+        },
+        {
+            "guide_Id": 222,
+            "guide_NM": "친환경 운동에 동참하기"
+        }
+    ]);
+
+    const categories = [...new Set(guideBookList.map(guide => guide.category_NM))];
+    const [selectedCategory, setSelectedCategory] = useState(categories[0]);        
+
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [isOpen, setIsOpen] = useState(false); // 드롭다운 메뉴의 상태를 관리합니다.
 
@@ -55,13 +201,22 @@ function GuideBook() {
 
     const handleCategoryClick = (categoryName) => {
         setSelectedCategory(categoryName);
-        setMoreGuide(false);
         setIsOpen(false); 
     }
 
-    const handleMoreCategoryClick = () => {
-        setMoreGuide(true);
-    }
+    const handleAddGuides = () => {
+        setGuideBookList(addGuideBookList => {
+            return addGuideBookList.map(category => {
+                if (category.category_NM === selectedCategory) {
+                    return {
+                        ...category,
+                        guides: [...category.guides, ...newGuides],  // newGuides 추가
+                    };
+                }
+                return category;
+            });
+        });
+    };
 
     return (
         <div className='guidebook flex text-[#589B7F] h-screen'>
@@ -140,22 +295,15 @@ function GuideBook() {
                         <div className='guide_contents_frame relative bg-[#EEF9F3] h-full rounded-b-3xl mx-2 mb-2'>
                             <div className='absolute h-full w-full overflow-auto'>
                                 <div className='m-4 lg:m-7 grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 gap-y-5 justify-items-center'>
-                                    {guideData.guide
-                                        .filter((guide) => guide.category_NM === selectedCategory)
-                                        .map((guide) => (
+                                    {guideBookList
+                                        .find(category => category.category_NM === selectedCategory)
+                                        .guides.map(guide => (
                                             <GuideContent key={guide.guide_Id} guideName={guide.guide_NM} />
                                         ))}
-
-                                    {moreGuide ?
-                                        moreGuideData.data                                            
-                                            .map((data) => (
-                                                <GuideContent key={data.guide_Id} guideName={data.guide_NM} />
-                                            ))
-                                        : null}
-
                                 </div>
+                                
                                 <div className='text-center my-8'>
-                                    <button className='bg-[#C3E0D1] rounded-full px-3 py-1' onClick={() => handleMoreCategoryClick()}>+ 가이드 더보기</button>
+                                    <button className='bg-[#C3E0D1] rounded-full px-3 py-1' onClick={handleAddGuides}>+ 가이드 더보기</button>
                                 </div>
                             </div>
                                         

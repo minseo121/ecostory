@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 
 function Header() {
@@ -26,9 +27,9 @@ function Header() {
 
     return (
         <div className="nav bg-white flex h-14 w-full drop-shadow-md fixed top-0 left-0 z-50">
-            <a className="block my-auto" href="#">
+            <Link to="/"><a className="block my-auto" href="/">
                 <img className="logo w-full max-w-40 h-full max-h-14 my-auto ml-4" alt="ecostory_logo" src="img/ecostory_logo.png"/>
-            </a>
+            </a></Link>
             <div className="nav_contents flex flex-1 justify-end pr-4 my-auto">
                 {/* 모바일 화면에서는 드롭다운 버튼 추가 */}
                 <button className={`block md:hidden ml-4 ${isDropdownOpen ? 'text-[#498D80]' : 'text-[#498D80]'}`} onClick={toggleDropdown}>
@@ -67,7 +68,7 @@ function Header() {
                             </div>
                             <div className="flex justify-end mb-8 text-xs pr-1 pt-2"> 
                                 <span className='text-[#A9D6C3]'>아이디가 없다면?&nbsp;</span>
-                                <a className="text-[#498D80]" href="#">회원가입하기</a>
+                                <Link to="/signup" className="text-[#498D80]">회원가입하기</Link>
                             </div>                            
                         </form>
                     </div>
@@ -75,10 +76,10 @@ function Header() {
                 {/* 데스크톱 화면에서는 바로 로그인과 회원가입 표시 */}
                 <ul className="hidden md:flex list-none pr-12 my-auto">
                     <li className="ml-10">
-                        <a className="text-[#498D80]" href="#">로그인</a>
+                        <Link to="/login" className="text-[#498D80]">로그인</Link>
                     </li>
                     <li className="ml-10">
-                        <a className="text-[#498D80]" href="#">회원가입</a>
+                        <Link to="/signup" className="text-[#498D80]">회원가입</Link>
                     </li>
                 </ul>
             </div>
@@ -87,26 +88,3 @@ function Header() {
 }
 
 export default Header;
-
-
-{/*
-import react from 'react';
-
-function Header() {
-    return (
-        <div className="nav bg-white flex h-16 w-full drop-shadow-md fixed top-0 left-0">
-            <img className="logo w-full max-w-40 h-full max-h-14 my-auto ml-4" alt="ecostory_logo" src="img/ecostory_logo.png"/>
-            <ul className="nav_contents list-none flex flex-1 justify-end pr-16 my-auto">
-                <li className="ml-10">
-                    <a className="text-[#498D80]" href="#">로그인</a>        
-                </li>        
-                <li className="ml-10">            
-                    <a className="text-[#498D80]" href="#">회원가입</a>        
-                </li>               
-            </ul>
-        </div>    
-    );
-}
-
-export default Header;
-*/}

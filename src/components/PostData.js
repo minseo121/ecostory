@@ -3,7 +3,7 @@ export const postData = {
         {
                 id: 1,
                 src: 'img/post_img.png',
-                text : "텍스트 줄 바꿈 해보기\n줄바꿈 되나?"
+                text : "텍스트 줄 바꿈 해보기\n줄바꿈 되나?텍스트 줄 바꿈 해보기\n줄바꿈 되나?텍스트 줄 바꿈 해보기\n줄바꿈 되나?텍스트 줄 바꿈 해보기\n줄바꿈 되나?"
         },
         {
                 id: 2,
@@ -13,7 +13,7 @@ export const postData = {
         {
                 id: 3,
                 src: 'img/post_img.png',
-                text : "이거 잘 되는거 맞나?\n\n잘 되는거 확인 완료~"
+                text : "곰돌이 노주히 가히 충격적\n\n주히랑 혜원이랑 같이 산책하면서\n환경실천 오늘도 완료!\n\n내일은 어떤 환경실천을 하면 좋을지 즐거운 고민~"                
         },
         {
                 id: 4,

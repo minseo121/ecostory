@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function checkList() {
     return(
@@ -55,9 +56,9 @@ function Header() {
 
     return (
         <div className="nav bg-white flex h-14 w-full drop-shadow-md fixed top-0 left-0 z-50">
-            <a className="block my-auto" href="#">
+            <Link to="/"><a className="block my-auto">
                 <img className="logo w-full max-w-40 h-full max-h-14 my-auto ml-4" alt="ecostory_logo" src="img/ecostory_logo.png"/>
-            </a>
+            </a></Link>
             <div className="nav_contents flex flex-1 justify-end pr-4 my-auto">
                 {/* 모바일 화면에서는 드롭다운 버튼 추가 */}
                 <button className={`block md:hidden ml-4 ${isDropdownOpen ? 'text-[#498D80]' : 'text-[#498D80]'}`} onClick={toggleDropdown}>
@@ -105,10 +106,10 @@ function Header() {
                                 </div>
 
                                 <div className='flex flex-col justify-center items-center'>                                
-                                    <a className="text-[#498D80] mb-5" href="#">체크리스트 만들기</a>                                                                            
-                                    <a className="text-[#498D80] mb-5" href="#">체크리스트 현황</a>                                 
-                                    <a className="text-[#498D80] mb-10" href="#">가이드북</a>                               
-                                    <div className='w-1/2 h-1 mx-auto bg-[#C3E0D1] mb-5'/>                             
+                                    <Link to="/plan" className="text-[#498D80] mb-5">체크리스트 만들기</Link>
+                                    <Link to="/checkliststate" className="text-[#498D80] mb-5">체크리스트 현황</Link>                          
+                                    <Link to="/guide" className="text-[#498D80] mb-10">가이드북</Link>                             
+                                    <div className='w-1/2 h-1 mx-auto bg-[#C3E0D1] mb-5'/>               
                                     <a className="text-[#498D80]" href="#">로그아웃</a>                                           
                                 </div>
                                 
@@ -123,41 +124,18 @@ function Header() {
                         <a className="text-[#498D80]" href="#">로그아웃</a>
                     </li> 
                     <li className="ml-10">            
-                        <a className="text-[#498D80]" href="#">체크리스트 만들기</a>        
+                        <Link to="/plan" className="text-[#498D80]">체크리스트 만들기</Link>       
                     </li>      
                     <li className="ml-10">            
-                        <a className="text-[#498D80]" href="#">체크리스트 현황</a>        
+                        <Link to="/checkliststate" className="text-[#498D80]">체크리스트 현황</Link>        
                     </li>   
                     <li className="ml-10">            
-                        <a className="text-[#498D80]" href="#">가이드북</a>        
+                        <Link to="/guide" className="text-[#498D80]">가이드북</Link>        
                     </li>   
                 </ul>
             </div>
         </div>    
     );
-    {/*
-    return (
-        
-        
-        <div className="nav bg-white flex h-14 w-full drop-shadow-md fixed top-0 left-0 z-50">   
-            <img className="logo w-full max-w-40 h-full max-h-14 my-auto ml-4" alt="ecostory_logo" src="img/ecostory_logo.png"/>
-            <ul className="nav_contents list-none flex flex-1 justify-end pr-16 my-auto">        
-                <li className="ml-10">      
-                    <a className="text-[#498D80]" href="#">로그아웃</a>
-                </li> 
-                <li className="ml-10">            
-                    <a className="text-[#498D80]" href="#">체크리스트 만들기</a>        
-                </li>      
-                <li className="ml-10">            
-                    <a className="text-[#498D80]" href="#">체크리스트 현황</a>        
-                </li>   
-                <li className="ml-10">            
-                    <a className="text-[#498D80]" href="#">가이드북</a>        
-                </li>            
-            </ul>
-        </div>        
-    );
-    */}
 }
 
 export default Header;
