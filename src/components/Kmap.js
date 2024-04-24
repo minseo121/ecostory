@@ -1,5 +1,3 @@
-// Kmap.js
-
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom"; 
 import Modal from "./Modal";
@@ -17,29 +15,6 @@ const Kmap = () => {
     const [mapClickable, setMapClickable] = useState(true); // 지도 클릭 가능 여부 상태
     const [selectedCircleInfo, setSelectedCircleInfo] = useState(null); // 클릭된 원의 정보 상태
 
-    useEffect(() => {
-        const handleResize = () => {
-            // 화면 너비가 640px 이하라면 중앙 좌표를 변경
-            if (window.innerWidth <= 640) {
-                setMapOptions({
-                    center: new kakao.maps.LatLng(37.6224568, 127.1473852),
-                    level: 10
-                });
-            } else {
-                // 그렇지 않으면 원래의 중앙 좌표로 설정
-                setMapOptions({
-                    center: new kakao.maps.LatLng(37.5609337, 126.980987),
-                    level: 10
-                });
-            }
-        };
-        console.log(mapOptions)
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [window.innerWidth]);
 
     useEffect(() => {
         const map = new kakao.maps.Map(mapContainer.current, mapOptions); 
@@ -70,11 +45,31 @@ const Kmap = () => {
             createCircle(map, circleInfo);
         });
 
+        const handleResize = () => {
+            // 화면 너비가 640px 이하라면 중앙 좌표를 변경
+            if (window.innerWidth <= 640) {
+                setMapOptions({
+                    center: new kakao.maps.LatLng(37.6224568, 127.1473852),
+                    level: 11
+                });
+            } else {
+                // 그렇지 않으면 원래의 중앙 좌표로 설정
+                setMapOptions({
+                    center: new kakao.maps.LatLng(37.5609337, 126.980987),
+                    level: 10
+                });
+            }
+        };
+        console.log(mapOptions);
+        window.addEventListener('resize', handleResize);
+        map.relayout();
+
         return () => {
+            window.removeEventListener('resize', handleResize);
             // 컴포넌트가 언마운트될 때 클릭 가능 여부를 다시 활성화
             setMapClickable(true);
         };
-    }, []);
+    }, [window.innerWidth]);
 
     const closeModal = () => {
         setShowModal(false);
@@ -86,8 +81,6 @@ const Kmap = () => {
                 return "#75B8FA";
             case "High" :
                 return "#f3d75d";
-            case "Middle" :
-                return "";
             case "Low" :
                 return "";
             case "Very Low" :
@@ -100,8 +93,6 @@ const Kmap = () => {
                 return "#CFE7FF";
             case "High" :
                 return "#f3d75d";
-            case "Middle" :
-                return "";
             case "Low" :
                 return "";
             case "Very Low" :

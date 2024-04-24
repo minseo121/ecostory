@@ -106,11 +106,11 @@ function Header() {
                                 </div>
 
                                 <div className='flex flex-col justify-center items-center'>                                
-                                    <Link to="/plan" className="text-[#498D80] mb-5">체크리스트 만들기</Link>
-                                    <Link to="/checkliststate" className="text-[#498D80] mb-5">체크리스트 현황</Link>                          
-                                    <Link to="/guide" className="text-[#498D80] mb-10">가이드북</Link>                             
-                                    <div className='w-1/2 h-1 mx-auto bg-[#C3E0D1] mb-5'/>               
-                                    <a className="text-[#498D80]" href="#">로그아웃</a>                                           
+                                    <Link to="/plan"><a className="text-[#498D80] mb-5">체크리스트 만들기</a></Link>                                                                            
+                                    <Link to="/checkliststate"><a className="text-[#498D80] mb-5">체크리스트 현황</a></Link>                                 
+                                    <Link to="/guide"><a className="text-[#498D80] mb-10">가이드북</a></Link>                               
+                                    <div className='w-1/2 h-1 mx-auto bg-[#C3E0D1] mb-5'/>                           
+                                    <Link to="/loginnot"><a className="text-[#498D80]">로그아웃</a></Link>                                           
                                 </div>
                                 
                             </div>
@@ -121,7 +121,7 @@ function Header() {
                 {/* 데스크톱 화면에서는 바로 로그인과 회원가입 표시 */}
                 <ul className="hidden md:flex list-none pr-12 my-auto">
                     <li className="ml-10">      
-                        <a className="text-[#498D80]" href="#">로그아웃</a>
+                        <Link to="/loginnot"><a className="text-[#498D80]" href="#">로그아웃</a></Link>
                     </li> 
                     <li className="ml-10">            
                         <Link to="/plan" className="text-[#498D80]">체크리스트 만들기</Link>       
