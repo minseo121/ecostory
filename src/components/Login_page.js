@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from "react";
-import '../css/login.css'
+import '../css/login.css';
+import axios from "axios"; 
 
 function Login_page() {
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+
     return(
         <>
         <div className="Login bg-[#D3E7DD]">
