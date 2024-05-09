@@ -185,7 +185,7 @@ function GuideBook() {
     const [selectedCategory, setSelectedCategory] = useState(categories[0]);        
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-    const [isOpen, setIsOpen] = useState(false); // 드롭다운 메뉴의 상태를 관리합니다.
+    const [isOpen, setIsOpen] = useState(false); // 드롭다운 메뉴의 상태를 관리
 
     useEffect(() => {
         const handleResize = () => {
@@ -204,6 +204,7 @@ function GuideBook() {
         setIsOpen(false); 
     }
 
+    //가이드 더보기 버튼
     const handleAddGuides = () => {
         setGuideBookList(addGuideBookList => {
             return addGuideBookList.map(category => {
@@ -217,6 +218,17 @@ function GuideBook() {
             });
         });
     };
+    
+    // 검색어에 따라 가이드를 필터링하는 함수
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const getFilteredGuides = () => {
+        return guideBookList
+          .find((category) => category.category_NM === selectedCategory)
+          .guides.filter((guide) =>
+            guide.guide_NM.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+      };
 
     return (
         <div className='guidebook flex text-[#589B7F] h-screen'>
@@ -232,7 +244,8 @@ function GuideBook() {
                             <div className='category_list flex-1 bg-white h-full w-11/12 mb-2 mx-auto rounded-b-lg shadow-inner p-5'>
                                 {categories.map(category => (
                                     <div className='mb-2' key={category}>
-                                        <button className={`${selectedCategory === category ? 'text-[#589B7F]' : 'text-[#589B7F]/[.45]'}`} onClick={() => handleCategoryClick(category)}>{category}</button>
+                                        <button className={`${selectedCategory === category ? 'text-[#589B7F]' : 'text-[#589B7F]/[.45]'}`} 
+                                                onClick={() => handleCategoryClick(category)}> {category} </button>
                                     </div>
                                 ))}
                             </div>
@@ -250,6 +263,7 @@ function GuideBook() {
                                 체크리스트에 넣고 싶은 목표들을 <span className='text-[#61D2A2]'>체크</span>해봐요.
                             </p>
                         </div>
+
                         <div className='list_search ml-auto my-auto bg-[#EDF8F3] h-11 sm:w-[336px] rounded-full flex items-center'>
                             <div className='search_icon ml-4'>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="#9DA4A0">
@@ -258,9 +272,13 @@ function GuideBook() {
                                 </svg>
                             </div>
                             <div className='search_textbox flex-1 ml-3 my-auto'>
-                                <input className='bg-[#EDF8F3] outline-none w-11/12'></input>
+                                <input className='bg-[#EDF8F3] outline-none w-11/12'
+                                        type='text'
+                                        value={searchTerm} 
+                                        onChange={(e) => setSearchTerm(e.target.value)}></input>
                             </div>
                         </div>
+
                     </div>
 
                     <div className='bg-[#A9D6C3] relative h-[70%] w-full rounded-3xl shadow-inner flex flex-col'>
@@ -295,16 +313,26 @@ function GuideBook() {
                         <div className='guide_contents_frame relative bg-[#EEF9F3] h-full rounded-b-3xl mx-2 mb-2'>
                             <div className='absolute h-full w-full overflow-auto'>
                                 <div className='m-4 lg:m-7 grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 gap-y-5 justify-items-center'>
-                                    {guideBookList
+                                    {getFilteredGuides().map((guide) => (
+                                        <GuideContent key={guide.guide_Id} guideName={guide.guide_NM} />
+                                    ))}        
+
+                                    {/*guideBookList
                                         .find(category => category.category_NM === selectedCategory)
                                         .guides.map(guide => (
                                             <GuideContent key={guide.guide_Id} guideName={guide.guide_NM} />
-                                        ))}
+                                        ))*/}                                                                   
                                 </div>
                                 
-                                <div className='text-center my-8'>
-                                    <button className='bg-[#C3E0D1] rounded-full px-3 py-1' onClick={handleAddGuides}>+ 가이드 더보기</button>
-                                </div>
+                                {searchTerm === '' && (
+                                    <div className='text-center my-8'>
+                                        <button
+                                            className='bg-[#C3E0D1] rounded-full px-3 py-1'
+                                            onClick={handleAddGuides}>
+                                            + 가이드 더보기
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                                         
                         </div>
