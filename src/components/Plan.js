@@ -1,6 +1,7 @@
 import React from 'react';
 import { planData } from './data/PlanData';
 
+// Checkbox 컴포넌트 정의
 function Checkbox({ disabled }) {
     const handleClick = () => {
         if (disabled) {
@@ -9,7 +10,7 @@ function Checkbox({ disabled }) {
     };
 
     return (
-        <label className={`relative flex items-center rounded-full cursor-pointer ${disabled ? 'pointer-events-none' : ''}`}  htmlFor="customStyle">
+        <label className={`relative flex items-center rounded-full cursor-pointer ${disabled ? 'pointer-events-none' : ''}`} htmlFor="customStyle">
             <input
                 type="checkbox"
                 className="before:content[''] peer relative h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-[#C3E0D1] bg-white transition-all checked:border-[#C3E0D1] checked:bg-[#C3E0D1] hover:scale-105"
@@ -25,6 +26,7 @@ function Checkbox({ disabled }) {
     );
 }
 
+// PlanList 컴포넌트 정의
 function PlanList({ weekData }) {
     return (
         <div className='w-full relative'>
@@ -33,7 +35,7 @@ function PlanList({ weekData }) {
                 <ul className='px-4 pb-5'>
                     {weekData.results.map((goal, index) => (
                         <li className='mt-3 flex justify-between' key={index}>
-                            <p className=''>{Object.values(goal)[0]}</p>
+                            <p className=''>{goal.guideNM}</p>
                             <Checkbox disabled={weekData.isPastWeek} />
                         </li>
                     ))}
@@ -46,42 +48,45 @@ function PlanList({ weekData }) {
     );
 }
 
-
+// 주어진 날짜의 주차를 계산하는 함수
 const getWeekNumber = (date) => {
     const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
     const firstDayOfWeek = firstDayOfMonth.getDay();
     const startOfWeek = firstDayOfMonth.getDate() - firstDayOfWeek + (firstDayOfWeek === 0 ? 0 : 7);
-    const pastDaysOfMonth = (date.getDate() - startOfWeek) / 7;
-    return Math.ceil(pastDaysOfMonth) + 1;
+    const pastDaysOfMonth = date.getDate() - startOfWeek;
+    return Math.ceil(pastDaysOfMonth / 7) + 1;
 };
 
+// 현재 주차 데이터를 반환하는 함수
 const getCurrentWeekData = () => {
     const currentDate = new Date();
     const currentWeek = getWeekNumber(currentDate);
 
     return Object.entries(planData).map(([week, data]) => ({
         title: week,
-        results: Object.values(data),
-        isPastWeek: parseInt(week) < currentWeek
+        results: data,
+        isPastWeek: parseInt(week) < currentWeek // 현재 주차보다 작으면 isPastWeek를 true로 설정
     }));
 };
 
+// Plan 컴포넌트 정의
 const Plan = () => {
-    const currentWeekData = getCurrentWeekData();
+    const allWeekData = getCurrentWeekData(); // 모든 주차의 데이터를 받아옵니다.
+/*     console.log("All week data:", allWeekData); */
+
     return (
-        <div className='flex-1 m-8 mt-24 sm:ml-56 sm:m-16 text-[#498D80] w-screen sm:mt-24 mb-16'>
+        <div className='flex-1 mt-24 sm:ml-64 sm:m-16 text-[#498D80] w-screen sm:mt-24 mb-16'>
             <div>
                 <p className='text-2xl'>이번 달 <span className='text-[#61D2A2]'>실천 계획</span></p>
                 <p className='my-2'>삭제하고 싶은 목록을 체크 후 저장 시, 해당 목록이 삭제된 후 적용됩니다</p>
             </div>
             <div className='grid grid-cols-1 m-2 mt-8 gap-10 md:grid-cols-3'>
-                {currentWeekData.map((weekData, index) => (
-                    <PlanList key={index} weekData={weekData}/>
+                {allWeekData.map((weekData, index) => (
+                    <PlanList key={index} weekData={weekData} />
                 ))}
             </div>
         </div>
     );
 };
-
 
 export default Plan;

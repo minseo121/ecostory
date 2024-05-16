@@ -43,7 +43,7 @@ function Sidebar() {
     return (
         <div>
             <div className='hidden sm:block'>
-                <div className="sidebar_row bg-[#D3E7DD] w-[220px] h-screen pt-14 fixed z-100">
+                <div className="sidebar_row bg-[#D3E7DD] w-[220px] h-screen pt-14 fixed z-20">
                     <div className='h-[5%]' />
 
                     <div className="profile_frame bg-[#EDF8F3] h-1/4 w-5/6 drop-shadow-md rounded-3xl relative flex mx-auto">
