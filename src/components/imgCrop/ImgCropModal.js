@@ -7,10 +7,7 @@ function ImgCropModal(props) {
     const { modalClose, image, setCroppedImage } = props;
 
     const ImageCropper = ({
-        open,
-        image,
-        onComplete,
-        containerStyle,
+        open, image, onComplete, containerStyle,
         ...props
     }) => {
         const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -33,7 +30,7 @@ function ImgCropModal(props) {
                         {...props}
                     />
                 </div>
-                <div className='flex justify-center mt-6 text-white'>
+                <div className='flex justify-center mt-6 text-white text-lg'>
                     <button
                         className='h-10 w-28 bg-[#61D2A2] rounded-xl mx-8'
                         onClick={() => {
@@ -46,7 +43,7 @@ function ImgCropModal(props) {
                     </button>
                     
                     <button
-                        className='h-10 w-28 bg-[#61D2A2] rounded-xl mx-8'
+                        className='h-10 w-28 border-[3px] border-[#61D2A2] bg-white text-[#61D2A2] rounded-xl mx-8'
                         onClick={() => { modalClose(false);}}>
                         취소
                     </button>
@@ -93,9 +90,9 @@ function ImgCropModal(props) {
                                 }}
                                 containerStyle={{
                                     position: "relative",
-                                    width: "100%",
+                                    width: "99%",
                                     height: 500,
-                                    background: "#333",                                    
+                                    background: "#333",
                                 }}
                             />
                         </div>
