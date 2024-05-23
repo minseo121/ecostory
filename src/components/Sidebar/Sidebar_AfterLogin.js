@@ -101,10 +101,13 @@ function Sidebar() {
                                 <div className='flex items-center'>
                                     <div className='w-full h-2 rounded-xl bg-[#C3E0D1]'></div>
                                     <div className='ml-2'>72%</div>
-                                </div>
-                                <div className="flex justify-end text-white mt-1 h-6">
-                                    <input type="button" value="이번주 목표 확인하기" className="login_btn bg-[#98C4B1] rounded-lg px-5" />
-                                </div>
+                                </div>                                                               
+                                <Link to="/checkliststate">
+                                    <div className="flex justify-end text-white mt-1 h-6">
+                                        <button className="login_btn bg-[#98C4B1] rounded-lg px-5">이번주 목표 확인하기</button>
+                                    </div>
+                                </Link>
+                                
                             </div>
                         </div>
 
