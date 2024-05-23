@@ -52,7 +52,7 @@ const Checklist = () => {
     return (
         <div className='w-full'>
             <div className='flex items-center justify-center'>
-                <div className='bg-[#F4F9F6] w-full sm:ml-56 sm:mt-24 mx-3 mb-5 mt-20 p-5 sm:p-10 rounded-xl border-solid border-2 border-[#C3E0D1]'>
+                <div className='bg-[#F4F9F6] w-full sm:ml-64 sm:mt-24 sm:mx-10 mx-5 mb-5 mt-20 p-5 sm:p-10 rounded-xl border-solid border-2 border-[#C3E0D1]'>
                     <div className='sm:flex sm:justify-between w-full'>
                         <p className='text-xl text-[#498D80]'>1월 1주차</p>
                         <div className='flex max-[640px]:w-full max-[640px]:justify-center max-[640px]:mt-3'>

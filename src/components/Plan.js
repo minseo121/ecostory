@@ -1,18 +1,26 @@
 import React from 'react';
 import { planData } from './data/PlanData';
 
+/* const fetchPlanData = async (userId, month) => {
+    const response = await fetch(`https://api.example.com/plans?userId=${userId}&month=${month}`);
+    const data = await response.json();
+    return data;
+}; */ //api 연결할 때 확인할 코드
+
 // Checkbox 컴포넌트 정의
-function Checkbox({ disabled }) {
+function Checkbox({id, disabled, onCheck }) {
     const handleClick = () => {
         if (disabled) {
             return; // 클릭 이벤트를 무시하도록 합니다.
         }
-    };
+        onCheck(id);
+    }
 
     return (
-        <label className={`relative flex items-center rounded-full cursor-pointer ${disabled ? 'pointer-events-none' : ''}`} htmlFor="customStyle">
+        <label className={`relative flex items-center rounded-full cursor-pointer ${disabled ? 'pointer-events-none' : ''}`} htmlFor={`checkbox-${id}`}>
             <input
                 type="checkbox"
+                id={`checkbox-${id}`}
                 className="before:content[''] peer relative h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-[#C3E0D1] bg-white transition-all checked:border-[#C3E0D1] checked:bg-[#C3E0D1] hover:scale-105"
                 disabled={disabled} // 버튼 비활성화 여부를 설정합니다.
                 onClick={handleClick} // 클릭 이벤트를 처리하는 함수를 설정합니다.
@@ -27,7 +35,7 @@ function Checkbox({ disabled }) {
 }
 
 // PlanList 컴포넌트 정의
-function PlanList({ weekData }) {
+function PlanList({ weekData, onCheck }) {
     return (
         <div className='w-full relative'>
             <div className={`p-5 border-[3px] border-[#A9D6C3] rounded-2xl shadow-md`}>
@@ -36,9 +44,9 @@ function PlanList({ weekData }) {
                     {weekData.results.map((goal, index) => (
                         <li className='mt-3 flex justify-between' key={index}>
                             <p className=''>{goal.guideNM}</p>
-                            <Checkbox disabled={weekData.isPastWeek} />
+                            <Checkbox id={`${goal.guideId}`} disabled={weekData.isPastWeek}  onCheck={onCheck} />
                         </li>
-                    ))}
+                    ))} 
                 </ul>
             </div>
             {weekData.isPastWeek && (
@@ -71,8 +79,26 @@ const getCurrentWeekData = () => {
 
 // Plan 컴포넌트 정의
 const Plan = () => {
+/*     const [planData, setPlanData] = useState({});
+    const userId = "njh"; // 임의로 사용자 ID를 설정합니다.
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; // 월을 1부터 12까지의 값으로 계산합니다.
+
+    useEffect(() => {
+        const loadPlanData = async () => {
+            const data = await fetchPlanData(userId, currentMonth);
+            setPlanData(data);
+        };
+        loadPlanData();
+    }, [userId, currentMonth]);
+ */ //api 처리할때 사용할 코드
+
+
     const allWeekData = getCurrentWeekData(); // 모든 주차의 데이터를 받아옵니다.
 /*     console.log("All week data:", allWeekData); */
+const handleCheck = (id) => {
+    console.log(`Checked ID: ${id}`);
+};//id를 찾아와서 일단 콘솔에 출력하도록 해놓음
 
     return (
         <div className='flex-1 mt-24 sm:ml-64 sm:m-16 text-[#498D80] w-screen sm:mt-24 mb-16'>
@@ -82,7 +108,7 @@ const Plan = () => {
             </div>
             <div className='grid grid-cols-1 m-2 mt-8 gap-10 md:grid-cols-3'>
                 {allWeekData.map((weekData, index) => (
-                    <PlanList key={index} weekData={weekData} />
+                    <PlanList key={index} weekData={weekData} onCheck={handleCheck} />
                 ))}
             </div>
         </div>
