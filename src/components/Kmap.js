@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom"; 
 import Modal from "./Modal";
-import { mapData } from "./data/MapData";
 
 const Kmap = () => {
     const mapContainer = useRef(null); 
@@ -14,8 +13,31 @@ const Kmap = () => {
     const [showModal, setShowModal] = useState(false);
     const [mapClickable, setMapClickable] = useState(true); // 지도 클릭 가능 여부 상태
     const [selectedCircleInfo, setSelectedCircleInfo] = useState(null); // 클릭된 원의 정보 상태
+    const [mapData, setMapData] = useState([]); // 지도 데이터를 상태로 관리
 
+    useEffect(() => {
+        // API에서 데이터 가져오기
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://13.209.53.13:8000/ecodata', {
+                    method: 'GET'
+                });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! 상태: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setMapData(data);
+                console.log("성공적 ", data);
+            } catch (error) {
+                console.error("오류 ", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+    
     useEffect(() => {
         const map = new kakao.maps.Map(mapContainer.current, mapOptions); 
 
@@ -25,7 +47,7 @@ const Kmap = () => {
                 radius: circleInfo.circle,
                 strokeColor: getStrokeColor(circleInfo.Severity),
                 fillColor: getFillColor(circleInfo.Severity),
-                
+
                 strokeWeight: 2,
                 strokeOpacity: 1,
                 strokeStyle: 'solid',
@@ -34,6 +56,16 @@ const Kmap = () => {
 
             circle.setMap(map);
 
+            // 커스텀 오버레이(시군 이름)
+            var customOverlay = new kakao.maps.CustomOverlay({
+                position: new kakao.maps.LatLng(circleInfo.Position_x, circleInfo.Position_y),
+                content: `<div class="text-sm text-gray-950/[.7]">${circleInfo.SIGUN_NM}</div>`,
+                xAnchor: 0.5,
+                yAnchor: 0.5 //중앙으로 오게 하기 위한 코드
+            });
+
+            customOverlay.setMap(map);
+
             kakao.maps.event.addListener(circle, 'click', function () {
                 setSelectedCircleInfo(circleInfo); // 클릭된 원의 정보 저장
                 setShowModal(true);
@@ -41,7 +73,7 @@ const Kmap = () => {
             });
         }
 
-        mapData.results.forEach(circleInfo => {
+        mapData.forEach(circleInfo => {
             createCircle(map, circleInfo);
         });
 
@@ -60,7 +92,7 @@ const Kmap = () => {
                 });
             }
         };
-        console.log(mapOptions);
+
         window.addEventListener('resize', handleResize);
         map.relayout();
 
@@ -69,33 +101,39 @@ const Kmap = () => {
             // 컴포넌트가 언마운트될 때 클릭 가능 여부를 다시 활성화
             setMapClickable(true);
         };
-    }, [window.innerWidth]);
+    }, [mapData, mapOptions]);
 
     const closeModal = () => {
         setShowModal(false);
         setMapClickable(true); // 모달이 닫혔을 때 지도 클릭 활성화
     };
+
     const getStrokeColor = (severity) => {
         switch(severity) {
             case "Very High" : 
-                return "#75B8FA";
+                return "#FF5052";
             case "High" :
-                return "#f3d75d";
+                return "#FF9947";
             case "Low" :
-                return "";
+                return "#FFFC6A";
             case "Very Low" :
+                return "#96FF6A";
+            default:
                 return "";
         }
     };
+
     const getFillColor = (severity) => {
         switch(severity) {
             case "Very High" : 
-                return "#CFE7FF";
+                return "#FF9E9F";
             case "High" :
-                return "#f3d75d";
+                return "#FFC595";
             case "Low" :
-                return "";
+                return "#FFFEB3";
             case "Very Low" :
+                return "#D4FFC2";
+            default:
                 return "";
         }
     };
@@ -107,4 +145,5 @@ const Kmap = () => {
         </>
     );
 };
+
 export default Kmap;
