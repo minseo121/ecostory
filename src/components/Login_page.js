@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import '../css/login.css';
-import axios from "axios";
+import { API } from "../api/API";
 
 function Login_page() {
     const [id, setId] = useState('');
@@ -11,15 +11,10 @@ function Login_page() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://13.209.53.13:8000/user/login', 
+            const response = await API().post('/user/login', 
                 {
                     userid: id,
                     password: password
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
                 }
             );
             if (response.status === 200) {
