@@ -1,5 +1,5 @@
 import {BrowserRouter, Router, Routes, Route, Switch} from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Map from './components/Kmap'
 import Main_BeforeLogin from './pages/Main_BeforeLogin';
@@ -12,16 +12,22 @@ import ChecklistState from './pages/ChecklistState';
 import Guide from './pages/Guide';
 import PlanMain from './pages/PlanMain';
 
-
-
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+    console.log(isLoggedIn)
+  }, []);
+
   return (
   <>
     <BrowserRouter>
         <Routes>
           <Route path='/' element={isLoggedIn ? <Main_AfterLogin /> : <Main_BeforeLogin />} />
-          <Route path='/loginnot' element={<Main_BeforeLogin />} />
           <Route path='/map' element={<Map/>} />
           <Route path='/login' element={<Login/>}/>
           <Route path='/profile' element={<Profile/>}/>

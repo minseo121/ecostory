@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import '../css/login.css';
 import { API } from "../api/API";
+import { useNavigate } from 'react-router-dom';
 
 function Login_page() {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [loginSuccess, setLoginSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [hide, setHide] = useState(true);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,18 +20,27 @@ function Login_page() {
                     password: password
                 }
             );
-            if (response.status === 200) {
+            if (response.status === 200 && response.data.token) {
+                const token = response.data.token; // 토큰 받기
+                localStorage.setItem('token', token); // 로컬 스토리지에 토큰 저장
                 setLoginSuccess(true);
                 setErrorMessage('');
+                // 로그인 성공 시 리디렉션
+                navigate('/');
+                window.location.reload(); // 페이지 새로고침
             } else {
                 setLoginSuccess(false);
-                setErrorMessage('로그인에 실패했습니다. 다시 시도해주세요.');
+                setErrorMessage('유효하지 않은 아이디, 비밀번호입니다.');
             }
         } catch (error) {
             setLoginSuccess(false);
-            setErrorMessage('로그인에 실패했습니다. 다시 시도해주세요.');
-            console.log("먼 에러임 : ",error)
+            setErrorMessage('유효하지 않은 아이디, 비밀번호입니다.');
+            console.log("먼 에러임 : ", error);
         }
+    };
+
+    const onToggleHide = () => {
+        setHide(prevHide => !prevHide);
     };
 
     return (
@@ -49,17 +61,29 @@ function Login_page() {
                                 </div>
                                 <div>
                                     <p className="pl-1">비밀번호</p>
-                                    <input type="password" placeholder="비밀번호" className="pw_input border-4 border-[#7bb49c56] w-full my-2 p-3 rounded-xl" onChange={(e) => setPassword(e.target.value)} />
+                                        <div className="relative">
+                                        <input type={hide ? 'password' : 'text'} placeholder="비밀번호" className="pw_input border-4 border-[#7bb49c56] w-full my-2 p-3 rounded-xl" onChange={(e) => setPassword(e.target.value)} />
+                                        {hide ? (
+                                            <div className="w-6 h-6 right-3 bottom-4 sm:bottom-0 sm:top-6 bg-white absolute">
+                                                <i className="bi bi-eye-fill" onClick={onToggleHide}></i>
+                                            </div>
+                                        ) : (
+                                            <div className="w-6 h-6 right-3 bottom-4 sm:bottom-0 sm:top-6 bg-white absolute">
+                                                <i className="bi bi-eye-slash-fill" onClick={onToggleHide}></i>
+                                            </div>
+                                        )}
+                                        </div>
                                 </div>
                                 <div className="flex items-center mt-3 mb-10">
                                     <input type="checkbox"></input>
                                     <label className="ml-3 text-sm">로그인 상태 유지하기</label>
                                 </div>
-                                <div className="mt-5 flex justify-center text-[#ffff] mb-10">
-                                    <button type="submit" className="btn_input bg-[#7BB49C] p-4 px-14 rounded-xl text-lg">로그인</button>
+                                <div className="text-center">
+                                    <div className="mt-5 flex justify-center text-[#ffff] mb-2">
+                                        <input type="submit" className="btn_input bg-[#7BB49C] p-4 px-14 rounded-xl text-lg hover:bg-[#589B7F] hover:cursor-pointer" value="로그인"/>
+                                    </div>
+                                    {errorMessage && <p className="text-red-500 text-sm ">{errorMessage}</p>}
                                 </div>
-                                {loginSuccess && <p className="text-green-500">로그인 성공했다</p>}
-                                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                             </form>
                         </div>
                     </div>

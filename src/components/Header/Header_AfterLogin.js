@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getCurrentWeekData } from '../Sidebar/Sidebar_AfterLogin';
-
 
 function Header() {    
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -9,6 +8,7 @@ function Header() {
     const [prevPageData, setPrevPageData] = useState([]); // 이전 페이지의 데이터
     const pageSize = 3; // 한 페이지에 보여질 항목 수
     const currentWeekData = getCurrentWeekData();
+    const navigate = useNavigate();
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -21,6 +21,12 @@ function Header() {
 
     const showLessItems = () => {
         setCurrentPage(currentPage - 1);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
+        navigate('/'); // 로그인 페이지로 리디렉션
+        window.location.reload(); // 페이지 새로고침
     };
 
     {/*모바일 크기 화면이었다가 데스크톱 화면 크기로 넘어갈 때, 메뉴바가 생성된 채로 커짐. 
@@ -128,7 +134,7 @@ function Header() {
                                     <Link to="/checkliststate" className="text-[#498D80] mb-5">체크리스트 현황</Link>                          
                                     <Link to="/guide" className="text-[#498D80] mb-10">가이드북</Link>                             
                                     <div className='w-1/2 h-1 mx-auto bg-[#C3E0D1] mb-5'/>               
-                                    <Link to="/loginnot"><a className="text-[#498D80]">로그아웃</a></Link>                                           
+                                    <button className="text-[#498D80]" onClick={handleLogout}>로그아웃</button>                                           
                                 </div>
                                 
                             </div>
@@ -139,7 +145,7 @@ function Header() {
                 {/* 데스크톱 화면에서는 바로 로그인과 회원가입 표시 */}
                 <ul className="hidden md:flex list-none pr-12 my-auto">
                     <li className="ml-10">      
-                        <Link to="/loginnot"><a className="text-[#498D80]" href="#">로그아웃</a></Link>
+                        <button className="text-[#498D80]" onClick={handleLogout}>로그아웃</button>
                     </li> 
                     <li className="ml-10">            
                         <Link to="/plan" className="text-[#498D80]">체크리스트 만들기</Link>       
