@@ -74,10 +74,6 @@ function Login_page() {
                                         )}
                                         </div>
                                 </div>
-                                <div className="flex items-center mt-3 mb-10">
-                                    <input type="checkbox"></input>
-                                    <label className="ml-3 text-sm">로그인 상태 유지하기</label>
-                                </div>
                                 <div className="text-center">
                                     <div className="mt-5 flex justify-center text-[#ffff] mb-2">
                                         <input type="submit" className="btn_input bg-[#7BB49C] p-4 px-14 rounded-xl text-lg hover:bg-[#589B7F] hover:cursor-pointer" value="로그인"/>

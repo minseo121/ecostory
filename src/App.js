@@ -1,7 +1,8 @@
-import {BrowserRouter, Router, Routes, Route, Switch} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Map from './components/Kmap'
+import { API } from './api/API';
+import Map from './components/Kmap';
 import Main_BeforeLogin from './pages/Main_BeforeLogin';
 import Main_AfterLogin from './pages/Main_AfterLogin';
 import Login from './pages/Login';
@@ -16,29 +17,42 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsLoggedIn(true);
-    }
-    console.log(isLoggedIn)
+    const checkToken = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await API().post('/guide/sidebar/njh', {
+            month: 5,
+            week: 1
+          });
+          if (response) {
+            setIsLoggedIn(true);
+          } else {
+            console.log('토큰 유효하지 않음');
+          }
+        } catch (error) {
+          console.error('뭔 에러:', error);
+        }
+      }
+    };
+
+    checkToken();
   }, []);
 
   return (
-  <>
-    <BrowserRouter>
-        <Routes>
-          <Route path='/' element={isLoggedIn ? <Main_AfterLogin /> : <Main_BeforeLogin />} />
-          <Route path='/map' element={<Map/>} />
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/profile' element={<Profile/>}/>
-          <Route path='/signup' element={<SignUp/>}/>
-          <Route path='/modal' element={<Modal/>}/>
-          <Route path='/checkliststate' element={<ChecklistState/>}/>
-          <Route path='/guide' element={<Guide/>}/>
-          <Route path='/plan' element={<PlanMain/>}/>
-        </Routes>
-    </BrowserRouter>
-  </>
+    <Router>
+      <Routes>
+        <Route path='/' element={isLoggedIn ? <Main_AfterLogin /> : <Main_BeforeLogin />} />
+        <Route path='/map' element={<Map />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/modal' element={<Modal />} />
+        <Route path='/checkliststate' element={<ChecklistState />} />
+        <Route path='/guide' element={<Guide />} />
+        <Route path='/plan' element={<PlanMain />} />
+      </Routes>
+    </Router>
   );
 }
 
