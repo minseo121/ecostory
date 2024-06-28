@@ -20,7 +20,7 @@ const PlanMain = () => {
     }, []);
 
     return (
-        <div>
+        <div className='relative'>
             <Header/>     
             <div className='flex'>
                 {!isMobile && <Sidebar/>}

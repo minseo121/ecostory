@@ -21,9 +21,9 @@ function App() {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await API().post('/guide/sidebar/njh', {
-            month: 5,
-            week: 1
+          const response = await API().post('/guide/sidebar', {
+            "month" : 5,
+            "week" : 1
           });
           if (response) {
             setIsLoggedIn(true);

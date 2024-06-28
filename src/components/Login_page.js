@@ -13,11 +13,13 @@ function Login_page() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log('ID:', id);
+        console.log('Password:', password); // 비밀번호 값 확인
         try {
             const response = await API().post('/user/login', 
                 {
-                    userid: id,
-                    password: password
+                    userid : id,
+                    password : password
                 }
             );
             if (response.status === 200 && response.data.token) {
