@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../css/Main.css";
 import axios from "axios";
 import Loading from "../animation/animation.js";
+import { API } from "../../api/API.js";
 
 function GuideContent({ guideName, guideId, isChecked, handleCheck }) {
   return (
@@ -53,6 +54,8 @@ function GuideBook() {
   const [isEndMap, setIsEndMap] = useState({}); // 각 카테고리의 Isend 값을 저장하는 객체
   const [isLoading, setIsLoading] = useState(false); // 가이드 더보기 버튼 > 로딩 상태를 관리
   const [checklist, setChecklist] = useState({ category_Id: [], guide_Id: [] });
+  const [month, setMonth] = useState(0); //'이번 달 목표에 넣기' 버튼을 누르면 현재 날짜에 대한 정보를 저장
+  const [weekOfMonth, setWeekOfMonth] = useState(0);
 
   //가이드북 초기값
   useEffect(() => {
@@ -105,6 +108,7 @@ function GuideBook() {
       return;
     }
 
+    //db에 남아있는 데이터가 없어 true가 왔다면 gpt prompt 전달(커스텀 데이터 생성)
     if (isEndMap[selectedCategory]) {
       const customData = {
         prompt: `친환경을 위해 실천할 수 있는 요소를 ${selectedCategory} 카테고리로 10가지만 JSON 형식으로 출력해줘`,
@@ -117,8 +121,6 @@ function GuideBook() {
         })
         .then((customResponse) => {
           console.log("커스텀 데이터 요청 성공 : ", customResponse.data);
-
-          const customGuides = customResponse.data;
 
           setGuideBookList((prev) => {
             const updatedList = prev.map((category) => {
@@ -214,32 +216,89 @@ function GuideBook() {
   // 체크박스 상태 변경 핸들러
   const handleCheck = (guideId) => {
     setChecklist((prevChecklist) => {
-      const isAlreadyChecked = prevChecklist.guide_Id.includes(guideId);
+      const isAlreadyChecked =
+        prevChecklist.guide_Id?.includes(guideId) || false;
       const currentCategoryId = getCategoryId();
 
+      // 가이드 ID 업데이트
       const updatedGuideIds = isAlreadyChecked
         ? prevChecklist.guide_Id.filter((id) => id !== guideId)
-        : [...prevChecklist.guide_Id, guideId];
+        : [...(prevChecklist.guide_Id || []), guideId];
 
+      // 해당 카테고리에 속한 다른 가이드들이 여전히 체크되어 있는지 확인
+      const isAnyOtherGuideChecked = updatedGuideIds.some((id) => {
+        const guide = guideBookList.find((g) =>
+          g.guide_NM.some((guide) => guide.guide_Id === id)
+        );
+        return guide && guide.category_Id === currentCategoryId;
+      });
+
+      // 카테고리 ID 업데이트
       const updatedCategoryIds =
-        isAlreadyChecked &&
-        !updatedGuideIds.some((id) => {
-          const guide = guideBookList.find((g) =>
-            g.guide_NM.some((guide) => guide.guide_Id === id)
-          );
-          return guide && guide.category_Id === currentCategoryId;
-        })
+        isAlreadyChecked && !isAnyOtherGuideChecked
           ? prevChecklist.category_Id.filter((id) => id !== currentCategoryId)
-          : [...new Set([...prevChecklist.category_Id, currentCategoryId])];
+          : [
+              ...new Set([
+                ...(prevChecklist.category_Id || []),
+                currentCategoryId,
+              ]),
+            ];
 
       const updatedChecklist = {
         category_Id: updatedCategoryIds,
         guide_Id: updatedGuideIds,
       };
 
-      console.log("checklist:", updatedChecklist);
+      console.log("업데이트된 checklist:", updatedChecklist); // 디버깅을 위해 추가
+
       return updatedChecklist;
     });
+  };
+
+  //현재 몇 주차인지 구하는 함수
+  const getCurrentWeek = (date) => {
+    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const pastDaysOfMonth = (date - startOfMonth) / 86400000;
+    return Math.ceil((pastDaysOfMonth + startOfMonth.getDay() + 1) / 7);
+  };
+
+  //렌더링 시 현재 날짜 정보를 저장
+  useEffect(() => {
+    const now = new Date();
+    setMonth(now.getMonth() + 1); // 월은 0부터 시작하므로 1을 더해줌
+    setWeekOfMonth(getCurrentWeek(now));
+  }, []);
+
+  // 이번 달 목표에 추가하기 버튼을 누르면 실행되는 핸들러
+  const handleAddGoal = async () => {
+    const checklistData = {
+      date: month,
+      week: weekOfMonth,
+      checklist: checklist,
+    };
+
+    console.log("checklistData:", checklistData); // 디버깅을 위해 추가
+
+    try {
+      const response = await API().post(
+        "/guide/makeplan",
+        checklistData,
+        {
+          withCredentials: true,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json", // 필요 시 추가
+          },
+        }
+      );
+      console.log("데이터 요청 성공:", response.data);
+    } catch (error) {
+      console.error(
+        "데이터 요청 실패:",
+        error.response ? error.response.data : error.message
+      );
+    }
   };
 
   return (
@@ -372,7 +431,10 @@ function GuideBook() {
 
           <div className="text-center pt-7 pb-3 mb-5">
             <div>
-              <button className="bg-[#61D2A2] h-[55px] w-[270px] text-white text-xl py-2 px-4 rounded-xl">
+              <button
+                className="bg-[#61D2A2] h-[55px] w-[270px] text-white text-xl py-2 px-4 rounded-xl"
+                onClick={handleAddGoal}
+              >
                 이번 달 목표에 넣기
               </button>
             </div>

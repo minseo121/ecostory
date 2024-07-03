@@ -1,4 +1,6 @@
 export const postData = {
+  user_name: "노주희",
+  user_image: null,
   postData: [
     {
       id: 1,
