@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../css/Main.css";
 import axios from "axios";
 import Loading from "../animation/animation.js";
-import { API } from "../../api/API.js";
+import { API, getUserId } from "../../api/API.js";
 
 function GuideContent({ guideName, guideId, isChecked, handleCheck }) {
   return (
@@ -277,27 +277,28 @@ function GuideBook() {
       checklist: checklist,
     };
 
-    console.log("checklistData:", checklistData); // 디버깅을 위해 추가
-
-    try {
-      const response = await API().post(
-        "/guide/makeplan",
-        checklistData,
-        {
-          withCredentials: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json", // 필요 시 추가
-          },
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const apiInstance = API();
+        const userId = getUserId();
+        const response = await apiInstance.post(
+          `/guide/makeplan/${userId}`,
+          checklistData
+        );
+        if (response) {
+          console.log("전송 데이터: ", checklistData);
+          console.log("데이터 요청 성공:", response.data);
+          console.log(`요청 경로: /guide/makeplan/${userId}`);
+        } else {
+          console.log("토큰 유효하지 않음");
         }
-      );
-      console.log("데이터 요청 성공:", response.data);
-    } catch (error) {
-      console.error(
-        "데이터 요청 실패:",
-        error.response ? error.response.data : error.message
-      );
+      } catch (error) {
+        console.error(
+          "데이터 요청 실패:",
+          error.response ? error.response.data : error.message
+        );
+      }
     }
   };
 
