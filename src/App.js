@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { API } from './api/API';
+import { API, getUserId } from './api/API';
 import Map from './components/Kmap';
 import Main_BeforeLogin from './pages/Main_BeforeLogin';
 import Main_AfterLogin from './pages/Main_AfterLogin';
@@ -15,15 +15,17 @@ import PlanMain from './pages/PlanMain';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+
   useEffect(() => {
     const checkToken = async () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await API().post('/guide/sidebar', {
-            "month" : 5,
-            "week" : 1
+          const apiInstance = API();
+          const userId = getUserId();
+          const response = await apiInstance.post(`/guide/sidebar/${userId}`, {
+            "month": 5,
+            "week": 1
           });
           if (response) {
             setIsLoggedIn(true);
