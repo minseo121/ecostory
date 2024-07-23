@@ -31,7 +31,7 @@ function Header() {
                     const apiInstance = API();
                     const userId = getUserId();
                     const sidebarResponse = await apiInstance.post(`/guide/sidebar/${userId}`, {
-                        month: currentMonth,
+                        month: 5,
                         week: currentWeek
                     });
                     const weekLists = [

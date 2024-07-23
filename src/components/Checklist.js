@@ -59,9 +59,21 @@ function FailList({ failItems }) {
     );
 }
 
+const getWeekNumber = (date) => {
+    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const firstDayOfWeek = firstDayOfMonth.getDay();
+    const startOfWeek = firstDayOfMonth.getDate() - firstDayOfWeek + (firstDayOfWeek === 0 ? 0 : 7);
+    const pastDaysOfMonth = date.getDate() - startOfWeek;
+    return Math.ceil(pastDaysOfMonth / 7) + 1;
+  };
+
 const Checklist = () => {
     const [weekData, setWeekData] = useState([]);
     const userId = getUserId(); // 사용자 ID 가져오기
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+
+    const currentWeek = getWeekNumber(currentDate);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -72,7 +84,7 @@ const Checklist = () => {
                     const userId = getUserId();
                     const response = await apiInstance.post(`/checklist/show/${userId}`, {
                         month: 5,
-                        WeekNumber: 3
+                        WeekNumber: currentWeek 
                     });
                     setWeekData(response.data);
                 } catch (error) {

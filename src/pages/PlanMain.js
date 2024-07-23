@@ -26,7 +26,6 @@ const PlanMain = () => {
                 {!isMobile && <Sidebar/>}
                 <Plan/>
             </div>
-            <PlanBtn/>
         </div>
     );
 };

@@ -4,27 +4,26 @@ import { useNavigate } from 'react-router-dom';
 import PlanBtn from './PlanBtn'; // PlanBtn 컴포넌트 import
 
 // Checkbox 컴포넌트 정의
-function Checkbox({ id, week, disabled, onCheck }) {
-  const handleClick = () => {
+function Checkbox({ id, week, disabled, onCheck, checked }) {
+  const handleChange = () => {
     if (disabled) {
-      return; // 클릭 이벤트를 무시하도록 합니다.
+      return; // 클릭 이벤트를 무시합니다.
     }
     onCheck(id, week);
   };
 
   return (
     <label
-      className={`relative flex items-center rounded-full cursor-pointer ${
-        disabled ? 'pointer-events-none' : ''
-      }`}
+      className={`relative flex items-center rounded-full cursor-pointer ${disabled ? 'pointer-events-none' : ''}`}
       htmlFor={`checkbox-${id}`}
     >
       <input
         type="checkbox"
         id={`checkbox-${id}`}
         className="before:content[''] peer relative h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-[#C3E0D1] bg-white transition-all checked:border-[#C3E0D1] checked:bg-[#C3E0D1] hover:scale-105"
-        disabled={disabled} // 버튼 비활성화 여부를 설정합니다.
-        onClick={handleClick} // 클릭 이벤트를 처리하는 함수를 설정합니다.
+        disabled={disabled}
+        checked={checked} // 체크 상태를 prop으로 받음
+        onChange={handleChange} // 클릭 시 상태 업데이트
       />
       <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
         <svg
@@ -46,8 +45,9 @@ function Checkbox({ id, week, disabled, onCheck }) {
   );
 }
 
+
 // PlanList 컴포넌트 정의
-function PlanList({ weekData, onCheck }) {
+function PlanList({ weekData, onCheck, checkedItems }) {
   return (
     <div className="w-full relative h-full flex flex-col">
       <div className="flex-grow p-5 border-[3px] border-[#A9D6C3] rounded-2xl shadow-md">
@@ -56,7 +56,13 @@ function PlanList({ weekData, onCheck }) {
           {Array.isArray(weekData.results) && weekData.results.map((goal, index) => (
             <li className="mt-3 flex justify-between" key={index}>
               <p className="">{goal.guideNM}</p>
-              <Checkbox id={goal.guideId} week={weekData.title} disabled={weekData.isPastWeek} onCheck={onCheck} />
+              <Checkbox
+                id={goal.guideId}
+                week={weekData.title}
+                disabled={weekData.isPastWeek}
+                onCheck={onCheck}
+                checked={checkedItems.some(item => item.id === goal.guideId && item.week === weekData.title)} // 추가된 부분
+              />
             </li>
           ))}
         </ul>
@@ -67,6 +73,7 @@ function PlanList({ weekData, onCheck }) {
     </div>
   );
 }
+
 
 // 주어진 날짜의 주차를 계산하는 함수
 const getWeekNumber = (date) => {
@@ -138,7 +145,7 @@ const Plan = () => {
     console.log('사실 함수는 잘 가고있었죠?');
     const userId = getUserId();
     const deleteData = {
-      month: currentMonth,
+      month: 5, //확인하려면 데이터가 들어있는 5월달로
       list: checkedItems.map(item => ({
         week: item.week,
         guide_Id: item.id,
@@ -152,13 +159,13 @@ const Plan = () => {
       await apiInstance.delete(`/guide/delete/${userId}`, { data: deleteData });
 
       const checklistResponse = await apiInstance.post(`/guide/checklist/${userId}`, {
-        month: currentMonth,
+        month: 5, //확인하려면 데이터가 들어있는 5월달로
       });
 
       if (checklistResponse.status === 200) {
         console.log('checklistResponse', checklistResponse.data); // 응답 데이터 로그
         setPlanData(checklistResponse.data);
-        setCheckedItems([]);
+        setCheckedItems([]); // 체크된 아이템 초기화
       }
     } catch (error) {
       console.error('등록 요청 중 에러 발생:', error);
@@ -175,12 +182,18 @@ const Plan = () => {
       </div>
       <div className="grid grid-cols-1 m-2 mt-8 gap-10 md:grid-cols-3 auto-rows-fr">
         {allWeekData.map((weekData, index) => (
-          <PlanList key={index} weekData={weekData} onCheck={handleCheck} />
+          <PlanList
+            key={index}
+            weekData={weekData}
+            onCheck={handleCheck}
+            checkedItems={checkedItems} // 추가된 부분
+          />
         ))}
+        <PlanBtn onRegister={handleRegister} />
       </div>
-      <PlanBtn />
     </div>
   );
 };
+
 
 export default Plan;

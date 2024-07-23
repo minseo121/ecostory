@@ -8,7 +8,7 @@ function DevideLine() {
     );
 }
 
-function Checkbox({ checked }) {
+function Checkbox({ checked, onChange }) {
     return (
         <div className="mx-auto py-[2%] text-center">
             <div className="inline-flex items-center">
@@ -16,7 +16,7 @@ function Checkbox({ checked }) {
                     <input type="checkbox"
                         className="before:content[''] peer relative h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-[#C3E0D1] bg-white transition-all checked:border-[#C3E0D1] checked:bg-[#C3E0D1] hover:scale-105"
                         checked={checked}
-                        readOnly
+                        onChange={onChange}
                     />
                     <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
@@ -45,19 +45,48 @@ function Sidebar() {
     const currentDate = new Date();
     const currentWeek = getWeekNumber(currentDate);
     const currentMonth = currentDate.getMonth() + 1;
+    const userId = getUserId();
     const [sidebarData, setSidebarData] = useState([]);
     const [username, setUsername] = useState('');
+    const [weekData, setWeekData] = useState([]);
     console.log(currentWeek);
 
+    //성공률 가져오는 API
     useEffect(() => {
-        const checkToken = async () => {
+
+        const fetchData = async () => {
+            const token = localStorage.getItem('token');
+            if(token){
+                try {
+                    const apiInstance = API();
+                    const userId = getUserId();
+                    const response = await apiInstance.post(`/checklist/show/${userId}`, {
+                        month: 5,
+                        WeekNumber: currentWeek 
+                    });
+                    const currentWeekData = response.data.filter(item => item.WeekNumber === currentWeek);
+                    setWeekData(currentWeekData);
+                    console.log('이거임', weekData);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            };
+        }
+
+        fetchData();
+    }, [userId, currentWeek]);
+
+
+    //사이드바 API
+    useEffect(() => {
+        const checkToken = async () => { //sidebar 내용 받아오기
             const token = localStorage.getItem('token');
             if (token) {
                 try {
                     const apiInstance = API();
                     const userId = getUserId();
                     const sidebarResponse = await apiInstance.post(`/guide/sidebar/${userId}`, {
-                        month: currentMonth,
+                        month: 5,
                         week: currentWeek
                     });
                     const weekLists = [
@@ -81,7 +110,43 @@ function Sidebar() {
         };
 
         checkToken();
-    }, [currentMonth, currentWeek]); // Ensure useEffect re-runs when currentMonth or currentWeek changes
+    }, [currentMonth, currentWeek]); 
+
+    const handleCheckboxChange = async (index) => { //체크하면 넘어가서 저장되는 API
+        const token = localStorage.getItem('token');
+        if (token) {
+            const updatedSidebarData = sidebarData.map((item, i) => {
+                if (i === index) {
+                    return { ...item, isComplete: item.isComplete === 1 ? 0 : 1 };
+                }
+                return item;
+            });
+
+            setSidebarData(updatedSidebarData);
+            console.log(updatedSidebarData);
+
+            const apiInstance = API();
+            const userId = getUserId();
+            try {
+                const requestPayload = {
+                    month: 5,
+                    week: currentWeek,
+                    IsWeekList1: updatedSidebarData[0]?.isComplete || 0,
+                    IsWeekList2: updatedSidebarData[1]?.isComplete || 0,
+                    IsWeekList3: updatedSidebarData[2]?.isComplete || 0,
+                    IsWeekList4: updatedSidebarData[3]?.isComplete || 0,
+                    IsWeekList5: updatedSidebarData[4]?.isComplete || 0
+                };
+                console.log('넣은 값', requestPayload);
+    
+                const response = await apiInstance.put(`/guide/savesidebar/${userId}`, requestPayload);
+    
+                console.log('API 대답', response.data);
+            } catch (error) {
+                console.error('체크리스트 상태 저장 중 에러 발생:', error);
+            }
+        }
+    };
 
     return (
         <div>
@@ -113,7 +178,7 @@ function Sidebar() {
                                     <div key={index}>
                                         <li className='mt-3 flex justify-between items-center pb-2'>
                                             <p className='mr-1'>{item.guideNM}</p>
-                                            <Checkbox checked={item.isComplete === 1} />
+                                            <Checkbox checked={item.isComplete === 1} onChange={() => handleCheckboxChange(index)} />
                                         </li>
                                         <DevideLine />
                                     </div>
@@ -136,8 +201,10 @@ function Sidebar() {
                             <div className='flex flex-col text-[10px] text-[#7BB49C]'>
                                 <p>이번주 성공률</p>
                                 <div className='flex items-center'>
-                                    <div className='w-full h-2 rounded-xl bg-[#C3E0D1]'></div>
-                                    <div className='ml-2'>72%</div>
+                                    <div className='w-full h-2 rounded-xl bg-[#C3E0D1]'>
+                                    <div className='bg-[#61D2A2] h-full rounded-xl' style={{ width: `${weekData[0]?.rate || 0}%` }}></div>
+                                    </div>
+                                    <div className='ml-2'>{weekData[0]?.rate || 0}%</div>
                                 </div>
                                 <Link to="/checkliststate">
                                     <div className="flex justify-end text-white mt-1 h-6">
