@@ -1,118 +1,186 @@
-import React from 'react';
-import { planData } from './data/PlanData';
-
-/* const fetchPlanData = async (userId, month) => {
-    const response = await fetch(`https://api.example.com/plans?userId=${userId}&month=${month}`);
-    const data = await response.json();
-    return data;
-}; */ //api 연결할 때 확인할 코드
+import React, { useState, useEffect } from 'react';
+import { API, getUserId } from '../api/API';
+import { useNavigate } from 'react-router-dom';
+import PlanBtn from './PlanBtn'; // PlanBtn 컴포넌트 import
 
 // Checkbox 컴포넌트 정의
-function Checkbox({id, disabled, onCheck }) {
-    const handleClick = () => {
-        if (disabled) {
-            return; // 클릭 이벤트를 무시하도록 합니다.
-        }
-        onCheck(id);
+function Checkbox({ id, week, disabled, onCheck }) {
+  const handleClick = () => {
+    if (disabled) {
+      return; // 클릭 이벤트를 무시하도록 합니다.
     }
+    onCheck(id, week);
+  };
 
-    return (
-        <label className={`relative flex items-center rounded-full cursor-pointer ${disabled ? 'pointer-events-none' : ''}`} htmlFor={`checkbox-${id}`}>
-            <input
-                type="checkbox"
-                id={`checkbox-${id}`}
-                className="before:content[''] peer relative h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-[#C3E0D1] bg-white transition-all checked:border-[#C3E0D1] checked:bg-[#C3E0D1] hover:scale-105"
-                disabled={disabled} // 버튼 비활성화 여부를 설정합니다.
-                onClick={handleClick} // 클릭 이벤트를 처리하는 함수를 설정합니다.
-            />
-            <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" strokeWidth="1">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-            </span>
-        </label>
-    );
+  return (
+    <label
+      className={`relative flex items-center rounded-full cursor-pointer ${
+        disabled ? 'pointer-events-none' : ''
+      }`}
+      htmlFor={`checkbox-${id}`}
+    >
+      <input
+        type="checkbox"
+        id={`checkbox-${id}`}
+        className="before:content[''] peer relative h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-[#C3E0D1] bg-white transition-all checked:border-[#C3E0D1] checked:bg-[#C3E0D1] hover:scale-105"
+        disabled={disabled} // 버튼 비활성화 여부를 설정합니다.
+        onClick={handleClick} // 클릭 이벤트를 처리하는 함수를 설정합니다.
+      />
+      <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-3.5 w-3.5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          stroke="currentColor"
+          strokeWidth="1"
+        >
+          <path
+            fillRule="evenodd"
+            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </span>
+    </label>
+  );
 }
 
 // PlanList 컴포넌트 정의
 function PlanList({ weekData, onCheck }) {
-    return (
-        <div className='w-full relative'>
-            <div className={`p-5 border-[3px] border-[#A9D6C3] rounded-2xl shadow-md`}>
-                <p className='pb-5'>{weekData.title}주차</p>
-                <ul className='px-4 pb-5'>
-                    {weekData.results.map((goal, index) => (
-                        <li className='mt-3 flex justify-between' key={index}>
-                            <p className=''>{goal.guideNM}</p>
-                            <Checkbox id={`${goal.guideId}`} disabled={weekData.isPastWeek}  onCheck={onCheck} />
-                        </li>
-                    ))} 
-                </ul>
-            </div>
-            {weekData.isPastWeek && (
-                <div className="absolute inset-0 bg-black opacity-30 rounded-2xl pointer-events-none"></div>
-            )}
-        </div>
-    );
+  return (
+    <div className="w-full relative h-full flex flex-col">
+      <div className="flex-grow p-5 border-[3px] border-[#A9D6C3] rounded-2xl shadow-md">
+        <p className="pb-5">{weekData.title}주차</p>
+        <ul className="px-4 pb-5">
+          {Array.isArray(weekData.results) && weekData.results.map((goal, index) => (
+            <li className="mt-3 flex justify-between" key={index}>
+              <p className="">{goal.guideNM}</p>
+              <Checkbox id={goal.guideId} week={weekData.title} disabled={weekData.isPastWeek} onCheck={onCheck} />
+            </li>
+          ))}
+        </ul>
+      </div>
+      {weekData.isPastWeek && (
+        <div className="absolute inset-0 bg-black opacity-30 rounded-2xl pointer-events-none"></div>
+      )}
+    </div>
+  );
 }
 
 // 주어진 날짜의 주차를 계산하는 함수
 const getWeekNumber = (date) => {
-    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const firstDayOfWeek = firstDayOfMonth.getDay();
-    const startOfWeek = firstDayOfMonth.getDate() - firstDayOfWeek + (firstDayOfWeek === 0 ? 0 : 7);
-    const pastDaysOfMonth = date.getDate() - startOfWeek;
-    return Math.ceil(pastDaysOfMonth / 7) + 1;
-};
-
-// 현재 주차 데이터를 반환하는 함수
-const getCurrentWeekData = () => {
-    const currentDate = new Date();
-    const currentWeek = getWeekNumber(currentDate);
-
-    return Object.entries(planData).map(([week, data]) => ({
-        title: week,
-        results: data,
-        isPastWeek: parseInt(week) < currentWeek // 현재 주차보다 작으면 isPastWeek를 true로 설정
-    }));
+  const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+  const firstDayOfWeek = firstDayOfMonth.getDay();
+  const startOfWeek = firstDayOfMonth.getDate() - firstDayOfWeek + (firstDayOfWeek === 0 ? 0 : 7);
+  const pastDaysOfMonth = date.getDate() - startOfWeek;
+  return Math.ceil(pastDaysOfMonth / 7) + 1;
 };
 
 // Plan 컴포넌트 정의
 const Plan = () => {
-/*     const [planData, setPlanData] = useState({});
-    const userId = "njh"; // 임의로 사용자 ID를 설정합니다.
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1; // 월을 1부터 12까지의 값으로 계산합니다.
+  const navigate = useNavigate();
+  const [planData, setPlanData] = useState([]);
+  const [checkedItems, setCheckedItems] = useState([]);
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
 
-    useEffect(() => {
-        const loadPlanData = async () => {
-            const data = await fetchPlanData(userId, currentMonth);
-            setPlanData(data);
-        };
-        loadPlanData();
-    }, [userId, currentMonth]);
- */ //api 처리할때 사용할 코드
+  // API 통신 코드
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const apiInstance = API();
+          const userId = getUserId();
+          const checklistResponse = await apiInstance.post(`/guide/checklist/${userId}`, {
+            month: 5,
+          });
+          if (checklistResponse.data === '체크리스트가 비었습니다. 새로 만들어주세요') {
+            alert('체크리스트가 비어있습니다. 가이드북 페이지로 이동합니다.');
+            navigate('/guide');
+            window.location.reload();
+          } else if (checklistResponse.status === 200) {
+            setPlanData(checklistResponse.data);
+          }
+        } catch (error) {
+          console.error('API 호출 중 에러 발생:', error);
+        }
+      }
+    };
 
+    checkToken();
+  }, []);
 
-    const allWeekData = getCurrentWeekData(); // 모든 주차의 데이터를 받아옵니다.
-/*     console.log("All week data:", allWeekData); */
-const handleCheck = (id) => {
-    console.log(`Checked ID: ${id}`);
-};//id를 찾아와서 일단 콘솔에 출력하도록 해놓음
+  const currentWeek = getWeekNumber(currentDate);
 
-    return (
-        <div className='flex-1 mt-24 sm:ml-64 sm:m-16 text-[#498D80] w-screen sm:mt-24 mb-16'>
-            <div>
-                <p className='text-2xl'>이번 달 <span className='text-[#61D2A2]'>실천 계획</span></p>
-                <p className='my-2'>삭제하고 싶은 목록을 체크 후 저장 시, 해당 목록이 삭제된 후 적용됩니다</p>
-            </div>
-            <div className='grid grid-cols-1 m-2 mt-8 gap-10 md:grid-cols-3'>
-                {allWeekData.map((weekData, index) => (
-                    <PlanList key={index} weekData={weekData} onCheck={handleCheck} />
-                ))}
-            </div>
-        </div>
+  const allWeekData = planData.flatMap(weekObject =>
+    Object.entries(weekObject).map(([week, data]) => ({
+      title: week,
+      results: data,
+      isPastWeek: parseInt(week) < currentWeek,
+    }))
+  );
+
+  const handleCheck = (id, week) => {
+    setCheckedItems(prevCheckedItems =>
+      prevCheckedItems.some(item => item.id === id)
+        ? prevCheckedItems.filter(item => item.id !== id)
+        : [...prevCheckedItems, { id, week }]
     );
+  };
+
+  useEffect(() => {
+    console.log('Updated checked items:', checkedItems);
+  }, [checkedItems]);
+
+  const handleRegister = async () => {
+    console.log('사실 함수는 잘 가고있었죠?');
+    const userId = getUserId();
+    const deleteData = {
+      month: currentMonth,
+      list: checkedItems.map(item => ({
+        week: item.week,
+        guide_Id: item.id,
+      })),
+    };
+    console.log('deleteData', deleteData); // 삭제할 데이터 로그
+
+    // 실제 삭제 요청 보내기
+    try {
+      const apiInstance = API();
+      await apiInstance.delete(`/guide/delete/${userId}`, { data: deleteData });
+
+      const checklistResponse = await apiInstance.post(`/guide/checklist/${userId}`, {
+        month: currentMonth,
+      });
+
+      if (checklistResponse.status === 200) {
+        console.log('checklistResponse', checklistResponse.data); // 응답 데이터 로그
+        setPlanData(checklistResponse.data);
+        setCheckedItems([]);
+      }
+    } catch (error) {
+      console.error('등록 요청 중 에러 발생:', error);
+    }
+  };
+
+  return (
+    <div className="flex-1 mt-24 sm:ml-64 sm:m-16 text-[#498D80] w-screen sm:mt-24 mb-16 max-w-screen-xl mx-auto">
+      <div>
+        <p className="text-2xl">
+          이번 달 <span className="text-[#61D2A2]">실천 계획</span>
+        </p>
+        <p className="my-2">삭제하고 싶은 목록을 체크 후 등록 시, 해당 목록이 삭제된 후 적용됩니다</p>
+      </div>
+      <div className="grid grid-cols-1 m-2 mt-8 gap-10 md:grid-cols-3 auto-rows-fr">
+        {allWeekData.map((weekData, index) => (
+          <PlanList key={index} weekData={weekData} onCheck={handleCheck} />
+        ))}
+      </div>
+      <PlanBtn />
+    </div>
+  );
 };
 
 export default Plan;
