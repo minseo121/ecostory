@@ -219,8 +219,7 @@ function GuideBook() {
   // 체크박스 상태 변경 핸들러
   const handleCheck = (guideId) => {
     setChecklist((prevChecklist) => {
-      const isAlreadyChecked =
-        prevChecklist.guide_Id?.includes(guideId) || false;
+      const isAlreadyChecked = prevChecklist.guide_Id.includes(guideId);
       const currentCategoryId = getCategoryId();
 
       // 이미 25개가 선택되어 있고, 새로운 항목을 체크하려는 경우
@@ -232,7 +231,7 @@ function GuideBook() {
       // 가이드 ID 업데이트
       const updatedGuideIds = isAlreadyChecked
         ? prevChecklist.guide_Id.filter((id) => id !== guideId)
-        : [...(prevChecklist.guide_Id || []), guideId];
+        : [...prevChecklist.guide_Id, guideId];
 
       // 해당 카테고리에 속한 다른 가이드들이 여전히 체크되어 있는지 확인
       const isAnyOtherGuideChecked = updatedGuideIds.some((id) => {
@@ -243,24 +242,14 @@ function GuideBook() {
       });
 
       // 카테고리 ID 업데이트
-      const updatedCategoryIds =
-        isAlreadyChecked && !isAnyOtherGuideChecked
-          ? prevChecklist.category_Id.filter((id) => id !== currentCategoryId)
-          : [
-              ...new Set([
-                ...(prevChecklist.category_Id || []),
-                currentCategoryId,
-              ]),
-            ];
+      const updatedCategoryIds = isAnyOtherGuideChecked
+        ? [...new Set([...prevChecklist.category_Id, currentCategoryId])]
+        : prevChecklist.category_Id.filter((id) => id !== currentCategoryId);
 
-      const updatedChecklist = {
+      return {
         category_Id: updatedCategoryIds,
         guide_Id: updatedGuideIds,
       };
-
-      console.log("업데이트된 checklist:", updatedChecklist); // 디버깅을 위해 추가
-
-      return updatedChecklist;
     });
   };
 
@@ -419,7 +408,7 @@ function GuideBook() {
                       guideName={guide.guide_NM}
                       guideId={guide.guide_Id}
                       isChecked={checklist.guide_Id.includes(guide.guide_Id)}
-                      handleCheck={() => handleCheck}
+                      handleCheck={handleCheck}
                     />
                   ))}
                 </div>
