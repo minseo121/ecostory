@@ -3,8 +3,7 @@ import ReactDOM from "react-dom";
 import { API, getUserId } from "../../api/API";
 
 function Modal(props) {
-  const { modalClose, postEdit, id, image, text, userName, userImage, guest } =
-    props;
+  const { modalClose, postEdit, id, image, text, userName, userImage } = props;
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -88,43 +87,29 @@ function Modal(props) {
             </div>
 
             <div className="modal_contents flex-1 mr-[15px] ml-[25px] my-[15px] text-[#589B7F]">
-              {guest == false ? (
-                <div className="modal_button flex justify-end space-x-6">
-                  <button
-                    className="post_edit text-xl my-auto"
-                    onClick={postUpdate}
-                  >
-                    수정
-                  </button>
-                  <button
-                    className="post_delete text-xl my-auto"
-                    onClick={postDelete}
-                  >
-                    삭제
-                  </button>
-                  <button
-                    className="modal_close float-right text-2xl"
-                    onClick={() => {
-                      modalClose(false);
-                      document.body.style.overflow = "unset";
-                    }}
-                  >
-                    X
-                  </button>
-                </div>
-              ) : (
-                <div className="modal_button flex justify-end space-x-6">
-                  <button
-                    className="modal_close float-right text-2xl"
-                    onClick={() => {
-                      modalClose(false);
-                      document.body.style.overflow = "unset";
-                    }}
-                  >
-                    X
-                  </button>
-                </div>
-              )}
+              <div className="modal_button flex justify-end space-x-6">
+                <button
+                  className="post_edit text-xl my-auto"
+                  onClick={postUpdate}
+                >
+                  수정
+                </button>
+                <button
+                  className="post_delete text-xl my-auto"
+                  onClick={postDelete}
+                >
+                  삭제
+                </button>
+                <button
+                  className="modal_close float-right text-2xl"
+                  onClick={() => {
+                    modalClose(false);
+                    document.body.style.overflow = "unset";
+                  }}
+                >
+                  X
+                </button>
+              </div>
 
               <div className="writer_info flex mb-3">
                 <div className="profile_img h-[65px] w-[65px] mr-3.5 rounded-full border-[3.5px] border-[#A9D6BE] overflow-hidden">
@@ -150,9 +135,7 @@ function Modal(props) {
                 </div>
                 <div className="username my-auto text-xl mr-2">{userName}</div>
               </div>
-
               <div className="devideline w-full my-4 border-2 border-[#A9D6C3]" />
-
               <div className="post_content overflow-y-auto text-lg h-[455px] w-full mx-auto">
                 {text.split("\n").map((line) => {
                   return (
@@ -172,42 +155,7 @@ function Modal(props) {
         <div className="fixed w-screen h-screen top-14 bg-white text-[#589B7F]">
           <div className="w-full h-full overflow-y-auto flex flex-col">
             <div className="mx-[5%]">
-              {guest == false ? (
-                <div className="flex justify-between items-center">
-                  <div>
-                    <button
-                      className="modal_close float-left my-2 text-2xl"
-                      onClick={() => {
-                        modalClose(false);
-                        document.body.style.overflow = "unset";
-                      }}
-                    >
-                      <svg
-                        width="46"
-                        height="46"
-                        viewBox="0 0 46 46"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                          fill="#589B7F"
-                          d="M34.5 23C34.5 23.7939 33.8564 24.4375 33.0625 24.4375H16.4079L22.579 30.6085C23.1403 31.1699 23.1403 32.0801 22.579 32.6415C22.0176 33.2028 21.1074 33.2028 20.546 32.6415L11.921 24.0165C11.3597 23.4551 11.3597 22.5449 11.921 21.9835L20.546 13.3585C21.1074 12.7972 22.0176 12.7972 22.579 13.3585C23.1403 13.9199 23.1403 14.8301 22.579 15.3915L16.4079 21.5625H33.0625C33.8564 21.5625 34.5 22.2061 34.5 23Z"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="float-right text-lg my-auto flex">
-                    <div className="mx-5">
-                      <button onClick={postUpdate}>수정</button>
-                    </div>
-                    <div>
-                      <button onClick={postDelete}>삭제</button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
+              <div className="flex justify-between items-center">
                 <div>
                   <button
                     className="modal_close float-left my-2 text-2xl"
@@ -232,7 +180,15 @@ function Modal(props) {
                     </svg>
                   </button>
                 </div>
-              )}
+                <div className="float-right text-lg my-auto flex">
+                  <div className="mx-5">
+                    <button onClick={postUpdate}>수정</button>
+                  </div>
+                  <div>
+                    <button onClick={postDelete}>삭제</button>
+                  </div>
+                </div>
+              </div>
 
               <div className="modal_img my-auto">
                 <img
@@ -241,7 +197,6 @@ function Modal(props) {
                   src={image}
                 />
               </div>
-
               <div className="writer_info flex mt-4">
                 <div className="profile_img h-[50px] w-[50px] mr-2 rounded-full border-[3px] border-[#A9D6BE] overflow-hidden">
                   {userImage == null ? (
@@ -268,9 +223,7 @@ function Modal(props) {
                   {userName}
                 </div>
               </div>
-
               <div className="devideline w-full my-4 border-2 border-[#A9D6C3]" />
-
               <div className="post_content text-base w-full mb-20 px-2">
                 <div>
                   {text.split("\n").map((line) => {

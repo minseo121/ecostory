@@ -3,7 +3,62 @@ import Header from "../components/Header/Header_AfterLogin";
 import Modal from "../components/Modal/PostModal";
 import PostingModal from "../components/Modal/PostingModal";
 import { API, getUserId } from "../api/API.js";
-import pako from "pako";
+import { BsPencilFill } from "react-icons/bs";
+
+const resizeFile = async (imageData) => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = imageData;
+
+    img.onload = function () {
+      const canvas = document.createElement("canvas");
+      const MAX_WIDTH = 300;
+      const MAX_HEIGHT = 300;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width;
+          width = MAX_WIDTH;
+        }
+      } else {
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height;
+          height = MAX_HEIGHT;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          resolve(blob);
+        },
+        "image/jpeg",
+        0.9
+      );
+    };
+
+    img.onerror = function (error) {
+      reject(error);
+    };
+  });
+};
+
+// Blob을 Base64로 변환하는 함수 추가
+const blobToBase64 = (blob) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
 
 function Profile() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -15,8 +70,11 @@ function Profile() {
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState(null);
   const [postData, setPostData] = useState([]);
-  const [guest, setGuest] = useState(false);
   const [postEdit, setPostEdit] = useState(false);
+
+  const [updateProfile, setUpdateProfile] = useState(false);
+  const [updateUserName, setUpdateUserName] = useState("");
+  const [updateUserImage, setUpdateUserImage] = useState(null);
 
   const menuRef = useRef(null);
 
@@ -24,8 +82,6 @@ function Profile() {
     const checkToken = async () => {
       const token = localStorage.getItem("token");
       if (token) {
-        setGuest(false);
-
         try {
           const apiInstance = API();
           const userId = getUserId();
@@ -33,13 +89,20 @@ function Profile() {
           if (response) {
             setUserName(response.data.user_name);
             setUserImage(response.data.user_image);
-            setPostData(response.data.post || []);
+
+            setUpdateUserName(response.data.user_name);
+            setUpdateUserImage(response.data.user_image);
+
+            // 게시글을 최신 순으로 정렬 (역순)
+            const sortedPosts = response.data.post
+              ? [...response.data.post]
+                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                  .reverse()
+              : [];
+            setPostData(sortedPosts);
 
             console.log("초기 데이터 요청 성공:", response.data);
             console.log(`요청 경로: /user/mypage/${userId}`);
-            console.log(
-              `user: ${response.data.user_name} , image: ${response.data.user_image}, post: ${response.data.post || []}`
-            );
           } else {
             console.log("response Error");
           }
@@ -50,7 +113,6 @@ function Profile() {
           );
         }
       } else {
-        setGuest(true);
         console.log("token 유효하지 않음: 비회원");
       }
     };
@@ -77,39 +139,67 @@ function Profile() {
   };
 
   const handleShare = (post) => {
+    const userId = getUserId();
+
     setMenuOpen(null);
 
-    const postData = {
-      id: post.id,
-      image: post.image,
-      text: post.content,
-      userName,
-      userImage,
-    };
-
-    // 데이터를 JSON 문자열로 변환
-    const jsonString = JSON.stringify(postData);
-
-    // 문자열을 UTF-8 인코딩된 Uint8Array로 변환
-    const uint8Array = new TextEncoder().encode(jsonString);
-
-    // 데이터 압축
-    const compressedData = pako.deflate(uint8Array);
-
-    // 압축된 데이터를 Base64로 인코딩
-    const base64Encoded = btoa(String.fromCharCode.apply(null, compressedData));
-
-    // URL에 안전한 형식으로 인코딩
-    const urlSafeEncoded = base64Encoded
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/, "");
-
-    const shareUrl = `${window.location.origin}/sharedpost/useId/postId`;
+    const shareUrl = `${window.location.origin}/share/${userId}/${post.id}`;
 
     navigator.clipboard.writeText(shareUrl).then(() => {
       alert("공유 링크가 클립보드에 복사되었습니다.");
     });
+  };
+
+  const handleUpdateProfile = () => {
+    setUpdateProfile(true);
+  };
+
+  const handleUpdate = async () => {
+    alert("수정완료");
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        let base64Image = updateUserImage;
+
+        // 이미지가 변경된 경우에만 리사이징 및 Base64 변환 수행
+        if (updateUserImage !== userImage) {
+          const resizedImage = await resizeFile(updateUserImage);
+          base64Image = await blobToBase64(resizedImage);
+        }
+
+        const data = { userImage: base64Image, name: updateUserName };
+
+        const apiInstance = API();
+        const userId = getUserId();
+        const response = await apiInstance.put(
+          `/user/profile/${userId}/update`,
+          data
+        );
+
+        if (response) {
+          console.log("프로필 수정 요청 성공:", response.data);
+          console.log(`요청 경로: /user/profile/${userId}/update`);
+
+          setUpdateProfile(false);
+
+          window.location.reload();
+        } else {
+          console.log("response Error");
+        }
+      } catch (error) {
+        console.error(
+          "데이터 요청 실패:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    } else {
+      console.log("token 유효하지 않음");
+    }
+  };
+
+  const handleUpdateName = (e) => {
+    setUpdateUserName(e.target.value);
   };
 
   useEffect(() => {
@@ -132,30 +222,102 @@ function Profile() {
       <Header />
 
       <div className="profile bg-white h-full mt-24 mb-8 sm:mb-16 sm:mt-28">
-        <div className="profile_container flex flex-col justify-center items-center">
-          <div className="profile_img h-[100px] w-[100px] sm:h-[150px] sm:w-[150px] mx-auto rounded-full border-[3px] sm:border-4 border-[#A9D6BE] overflow-hidden">
-            {userImage == null ? (
-              <svg
-                className="object-cover w-full h-full"
-                fill="#A9D6BE"
-                width="800px"
-                height="800px"
-                viewBox="0 0 32 32"
-                version="1.1"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <title>user</title>
-                <path d="M16 16.75c4.28 0 7.75-3.47 7.75-7.75s-3.47-7.75-7.75-7.75c-4.28 0-7.75 3.47-7.75 7.75v0c0.005 4.278 3.472 7.745 7.75 7.75h0zM16 2.75c3.452 0 6.25 2.798 6.25 6.25s-2.798 6.25-6.25 6.25c-3.452 0-6.25-2.798-6.25-6.25v0c0.004-3.45 2.8-6.246 6.25-6.25h0zM30.41 29.84c-1.503-6.677-7.383-11.59-14.41-11.59s-12.907 4.913-14.391 11.491l-0.019 0.099c-0.011 0.048-0.017 0.103-0.017 0.16 0 0.414 0.336 0.75 0.75 0.75 0.357 0 0.656-0.25 0.731-0.585l0.001-0.005c1.351-5.998 6.633-10.41 12.945-10.41s11.594 4.413 12.929 10.322l0.017 0.089c0.076 0.34 0.374 0.59 0.732 0.59 0 0 0.001 0 0.001 0h-0c0.057-0 0.112-0.007 0.165-0.019l-0.005 0.001c0.34-0.076 0.59-0.375 0.59-0.733 0-0.057-0.006-0.112-0.018-0.165l0.001 0.005z"></path>
-              </svg>
-            ) : (
-              <img src={userImage} className="object-cover w-full h-full" />
-            )}
-          </div>
+        {updateProfile ? (
+          <div className="profile_container flex flex-col justify-center items-center">
+            <div className="profile_img h-[100px] w-[100px] sm:h-[150px] sm:w-[150px] mx-auto rounded-full border-[3px] sm:border-4 border-[#A9D6BE] overflow-hidden">
+              <label htmlFor="image-upload">
+                {updateUserImage == null ? (
+                  <svg
+                    className="object-cover w-full h-full cursor-pointer"
+                    fill="#A9D6BE"
+                    width="800px"
+                    height="800px"
+                    viewBox="0 0 32 32"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>user</title>
+                    <path d="M16 16.75c4.28 0 7.75-3.47 7.75-7.75s-3.47-7.75-7.75-7.75c-4.28 0-7.75 3.47-7.75 7.75v0c0.005 4.278 3.472 7.745 7.75 7.75h0zM16 2.75c3.452 0 6.25 2.798 6.25 6.25s-2.798 6.25-6.25 6.25c-3.452 0-6.25-2.798-6.25-6.25v0c0.004-3.45 2.8-6.246 6.25-6.25h0zM30.41 29.84c-1.503-6.677-7.383-11.59-14.41-11.59s-12.907 4.913-14.391 11.491l-0.019 0.099c-0.011 0.048-0.017 0.103-0.017 0.16 0 0.414 0.336 0.75 0.75 0.75 0.357 0 0.656-0.25 0.731-0.585l0.001-0.005c1.351-5.998 6.633-10.41 12.945-10.41s11.594 4.413 12.929 10.322l0.017 0.089c0.076 0.34 0.374 0.59 0.732 0.59 0 0 0.001 0 0.001 0h-0c0.057-0 0.112-0.007 0.165-0.019l-0.005 0.001c0.34-0.076 0.59-0.375 0.59-0.733 0-0.057-0.006-0.112-0.018-0.165l0.001 0.005z"></path>
+                  </svg>
+                ) : (
+                  <img
+                    src={updateUserImage}
+                    className="object-cover w-full h-full cursor-pointer"
+                    alt="User"
+                  />
+                )}
+              </label>
+              <input
+                type="file"
+                id="image-upload"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      setUpdateUserImage(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </div>
 
-          <div className="username mt-[15px] text-[#589B7F] text-lg sm:text-xl">
-            {userName}
+            <div className="flex justify-center items-center">
+              <input
+                type="text"
+                value={updateUserName}
+                onChange={handleUpdateName}
+                className="mt-[15px] text-[#589B7F] text-lg sm:text-xl text-center py-2"
+              />
+            </div>
+            <button
+              onClick={handleUpdate}
+              className="mt-4 px-4 py-2 bg-[#61D2A2] text-white rounded-lg"
+            >
+              수정 완료
+            </button>
           </div>
-        </div>
+        ) : (
+          <div className="profile_container flex flex-col justify-center items-center">
+            <div className="profile_img h-[100px] w-[100px] sm:h-[150px] sm:w-[150px] mx-auto rounded-full border-[3px] sm:border-4 border-[#A9D6BE] overflow-hidden">
+              {userImage == null ? (
+                <svg
+                  className="object-cover w-full h-full"
+                  fill="#A9D6BE"
+                  width="800px"
+                  height="800px"
+                  viewBox="0 0 32 32"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title>user</title>
+                  <path d="M16 16.75c4.28 0 7.75-3.47 7.75-7.75s-3.47-7.75-7.75-7.75c-4.28 0-7.75 3.47-7.75 7.75v0c0.005 4.278 3.472 7.745 7.75 7.75h0zM16 2.75c3.452 0 6.25 2.798 6.25 6.25s-2.798 6.25-6.25 6.25c-3.452 0-6.25-2.798-6.25-6.25v0c0.004-3.45 2.8-6.246 6.25-6.25h0zM30.41 29.84c-1.503-6.677-7.383-11.59-14.41-11.59s-12.907 4.913-14.391 11.491l-0.019 0.099c-0.011 0.048-0.017 0.103-0.017 0.16 0 0.414 0.336 0.75 0.75 0.75 0.357 0 0.656-0.25 0.731-0.585l0.001-0.005c1.351-5.998 6.633-10.41 12.945-10.41s11.594 4.413 12.929 10.322l0.017 0.089c0.076 0.34 0.374 0.59 0.732 0.59 0 0 0.001 0 0.001 0h-0c0.057-0 0.112-0.007 0.165-0.019l-0.005 0.001c0.34-0.076 0.59-0.375 0.59-0.733 0-0.057-0.006-0.112-0.018-0.165l0.001 0.005z"></path>
+                </svg>
+              ) : (
+                <img
+                  src={userImage}
+                  className="object-cover w-full h-full"
+                  alt="User"
+                />
+              )}
+            </div>
+
+            <div className="flex justify-center items-center">
+              <div className="username mt-[15px] text-[#589B7F] text-lg sm:text-xl">
+                {userName}
+              </div>
+              <button
+                className="ml-2 mt-[15px] text-[#589B7F] text-lg sm:text-xl"
+                onClick={handleUpdateProfile}
+              >
+                <BsPencilFill />
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="post_container mx-[5%] md:mx-[7%] lg:mx-[20%] my-[40px]">
           <div className="post_frame rounded-lg border-4 border-[#61D2A2]">
@@ -199,7 +361,6 @@ function Profile() {
                     postEdit={setPostEdit}
                     userName={userName}
                     userImage={userImage}
-                    guest={guest}
                   />
                 )}
 

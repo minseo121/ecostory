@@ -12,7 +12,7 @@ import Modal from "./components/Modal";
 import ChecklistState from "./pages/ChecklistState";
 import Guide from "./pages/Guide";
 import PlanMain from "./pages/PlanMain";
-import SharedPost from "./components/SharedPost";
+import SharedPage from "./pages/SharedPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -57,7 +57,7 @@ function App() {
         <Route path="/checkliststate" element={<ChecklistState />} />
         <Route path="/guide" element={<Guide />} />
         <Route path="/plan" element={<PlanMain />} />
-        <Route path="/sharedpost" element={<SharedPost />} />
+        <Route path="/share/:userId/:postId" element={<SharedPage />} />
       </Routes>
     </Router>
   );

@@ -223,6 +223,12 @@ function GuideBook() {
         prevChecklist.guide_Id?.includes(guideId) || false;
       const currentCategoryId = getCategoryId();
 
+      // 이미 25개가 선택되어 있고, 새로운 항목을 체크하려는 경우
+      if (prevChecklist.guide_Id.length >= 25 && !isAlreadyChecked) {
+        alert("최대 25개까지만 선택할 수 있습니다.");
+        return prevChecklist; // 기존 상태를 변경하지 않고 반환
+      }
+
       // 가이드 ID 업데이트
       const updatedGuideIds = isAlreadyChecked
         ? prevChecklist.guide_Id.filter((id) => id !== guideId)
@@ -413,7 +419,7 @@ function GuideBook() {
                       guideName={guide.guide_NM}
                       guideId={guide.guide_Id}
                       isChecked={checklist.guide_Id.includes(guide.guide_Id)}
-                      handleCheck={handleCheck}
+                      handleCheck={() => handleCheck}
                     />
                   ))}
                 </div>
