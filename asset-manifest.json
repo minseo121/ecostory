@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/ecostory/static/css/main.0e75e241.css",
-    "main.js": "/ecostory/static/js/main.fe397b6c.js",
+    "main.js": "/ecostory/static/js/main.4b053c03.js",
     "static/media/NanumSquareNeoOTF-Eb.otf": "/ecostory/static/media/NanumSquareNeoOTF-Eb.6f429991125aa7480b07.otf",
     "static/media/NanumSquareNeoOTF-Hv.otf": "/ecostory/static/media/NanumSquareNeoOTF-Hv.2b56a694b518a9d7c513.otf",
     "static/media/NanumSquareNeoOTF-Lt.otf": "/ecostory/static/media/NanumSquareNeoOTF-Lt.7ffce9ca10070e7e82c7.otf",
@@ -9,10 +9,10 @@
     "static/media/NanumSquareNeoOTF-Bd.otf": "/ecostory/static/media/NanumSquareNeoOTF-Bd.e660325c185937474b82.otf",
     "index.html": "/ecostory/index.html",
     "main.0e75e241.css.map": "/ecostory/static/css/main.0e75e241.css.map",
-    "main.fe397b6c.js.map": "/ecostory/static/js/main.fe397b6c.js.map"
+    "main.4b053c03.js.map": "/ecostory/static/js/main.4b053c03.js.map"
   },
   "entrypoints": [
     "static/css/main.0e75e241.css",
-    "static/js/main.fe397b6c.js"
+    "static/js/main.4b053c03.js"
   ]
 }
