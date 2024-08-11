@@ -56,13 +56,14 @@ function PlanList({ weekData, onCheck, checkedItems }) {
           {Array.isArray(weekData.results) && weekData.results.map((goal, index) => (
             <li className="mt-3 flex justify-between" key={index}>
               <p className="">{goal.guideNM}</p>
-              <Checkbox
-                id={goal.guideId}
-                week={weekData.title}
-                disabled={weekData.isPastWeek}
-                onCheck={onCheck}
-                checked={checkedItems.some(item => item.id === goal.guideId && item.week === weekData.title)} // 추가된 부분
-              />
+              <div className='ml-3'>
+                <Checkbox
+                  id={goal.guideId}
+                  week={weekData.title}
+                  disabled={weekData.isPastWeek}
+                  onCheck={onCheck}
+                  checked={checkedItems.some(item => item.id === goal.guideId && item.week === weekData.title)} // 추가된 부분
+                /></div>
             </li>
           ))}
         </ul>
@@ -173,14 +174,14 @@ const Plan = () => {
   };
 
   return (
-    <div className="flex-1 mt-24 sm:ml-64 sm:m-16 text-[#498D80] w-screen sm:mt-24 mb-16 max-w-screen-xl mx-auto">
+    <div className="flex-1 mt-24 sm:ml-64 sm:m-10 text-[#498D80] w-screen sm:mt-24 mb-16 max-w-screen-xl mx-auto">
       <div>
         <p className="text-2xl">
           이번 달 <span className="text-[#61D2A2]">실천 계획</span>
         </p>
         <p className="my-2">삭제하고 싶은 목록을 체크 후 등록 시, 해당 목록이 삭제된 후 적용됩니다</p>
       </div>
-      <div className="grid grid-cols-1 m-2 mt-8 gap-10 md:grid-cols-3 auto-rows-fr">
+      <div className="grid grid-cols-1 m-2 mt-8 gap-10 md:grid-cols-3">
         {allWeekData.map((weekData, index) => (
           <PlanList
             key={index}
