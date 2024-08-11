@@ -317,7 +317,7 @@ function GuideBook() {
   return (
     <div className="guidebook flex text-[#589B7F] h-screen">
       {windowWidth > 640 && (
-        <div className="category_frame bg-[#D3E7DD] h-full w-[185px] text-lg fixed pt-14">
+        <div className="category_frame bg-[#D3E7DD] h-full w-[220px] text-lg fixed pt-14">
           <div className="h-[8%]" />
           <div className="h-full">
             <div className="category bg-[#EDF8F3] relative h-5/6 w-5/6 mx-auto rounded-2xl drop-shadow-lg flex flex-col">
@@ -341,7 +341,7 @@ function GuideBook() {
         </div>
       )}
 
-      <div className="guidebook_page flex-1 h-screen sm:pl-[185px] pt-14 ">
+      <div className="guidebook_page flex-1 h-screen sm:pl-[220px] pt-14 ">
         <div className="h-full px-2 sm:px-10 pt-5">
           <div className="sm:flex mb-5 max-[640px]:mx-5">
             <div>

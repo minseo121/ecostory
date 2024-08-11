@@ -15,7 +15,7 @@ import PlanMain from "./pages/PlanMain";
 import SharedPage from "./pages/SharedPage";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -43,7 +43,6 @@ function App() {
   }, []);
 
   return (
-    <Router>
       <Routes>
         <Route
           path="/"
@@ -59,7 +58,6 @@ function App() {
         <Route path="/plan" element={<PlanMain />} />
         <Route path="/share/:userId/:postId" element={<SharedPage />} />
       </Routes>
-    </Router>
   );
 }
 

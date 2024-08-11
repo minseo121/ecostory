@@ -154,7 +154,7 @@ function Sidebar() {
                 <div className="sidebar_row bg-[#D3E7DD] w-[220px] h-full pt-14 fixed z-20">
                     <div className='h-[5%]' />
                     <Link to="/profile">
-                        <div className="profile_frame bg-[#EDF8F3] h-1/4 w-5/6 drop-shadow-md rounded-3xl relative flex mx-auto">
+                        <div className="profile_frame bg-[#EDF8F3] aspect-square w-5/6 drop-shadow-md rounded-3xl relative flex mx-auto">
                             <div className="profile_content flex-1">
                                 <div className="profile_img bg-white h-2/3 w-2/3 rounded-full mx-auto mt-2"></div>
                                 <div className="profile_info flex justify-center mt-[5%]">
@@ -179,7 +179,9 @@ function Sidebar() {
                                     <div key={index}>
                                         <li className='mt-3 flex justify-between items-center pb-2'>
                                             <p className='mr-1'>{item.guideNM}</p>
-                                            <Checkbox checked={item.isComplete === 1} onChange={() => handleCheckboxChange(index)} />
+                                            <div className='ml-3'>
+                                                <Checkbox checked={item.isComplete === 1} onChange={() => handleCheckboxChange(index)} />
+                                            </div>
                                         </li>
                                         <DevideLine />
                                     </div>
@@ -193,11 +195,14 @@ function Sidebar() {
             <div className='sm:hidden'>
                 <div className="sidebar_col bg-[#EDF8F3] h-[130px] relative top-14 text-[#589B7F]">
                     <div className='info h-full w-[85%] mx-auto flex items-center'>
-                        <div className='profile_img h-[95px] w-[95px] mr-3.5 rounded-full border-[3.5px] border-[#A9D6BE]'></div>
-
+                        <Link to="/profile">
+                            <div className='profile_img h-[95px] w-[95px] mr-3.5 rounded-full border-[3.5px] border-[#A9D6BE]'></div>
+                        </Link>
                         <div className='flex-1'>
                             <div className='flex mb-1'>
-                                <div className='nickname my-auto mr-2'>{username}</div>
+                                <Link to ="/profile">
+                                    <div className='nickname my-auto mr-2'>{username}</div>
+                                </Link>
                             </div>
                             <div className='flex flex-col text-[10px] text-[#7BB49C]'>
                                 <p>이번주 성공률</p>

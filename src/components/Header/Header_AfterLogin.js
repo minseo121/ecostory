@@ -23,7 +23,8 @@ function Header() {
 
     const currentWeek = getWeekNumber(currentDate);
 
-    useEffect(() => {
+    //사이드바 API
+    useEffect(() => { 
         const checkToken = async () => {
             const token = localStorage.getItem('token');
             if (token) {
@@ -40,25 +41,55 @@ function Header() {
                         { guideNM: sidebarResponse.data.WeekListNM3, isComplete: sidebarResponse.data.IsWeekList3, id: sidebarResponse.data.WeekListID3 },
                         { guideNM: sidebarResponse.data.WeekListNM4, isComplete: sidebarResponse.data.IsWeekList4, id: sidebarResponse.data.WeekListID4 },
                         { guideNM: sidebarResponse.data.WeekListNM5, isComplete: sidebarResponse.data.IsWeekList5, id: sidebarResponse.data.WeekListID5 },
-                    ].filter(item => item.guideNM); // Filter out any undefined or null values
-
-                    console.log(sidebarResponse.data.username)
-                    console.log(sidebarResponse.data)
+                    ].filter(item => item.guideNM);
+    
                     setSidebarData(weekLists);
-                    if (!sidebarResponse.data.username || sidebarResponse.data.username.trim() === '') {
-                        setUsername(sidebarResponse.data.user);
-                    } else {
-                        setUsername(sidebarResponse.data.username);
-                    }
-                    console.log(username)
+                    setUsername(sidebarResponse.data.username || sidebarResponse.data.user);
                 } catch (error) {
                     console.error('API 호출 중 에러 발생:', error);
                 }
             }
         };
-
+    
         checkToken();
-    }, [currentMonth, currentWeek]); // Ensure useEffect re-runs when currentMonth, currentWeek, or sidebarData changes
+    }, [currentMonth, currentWeek]);
+
+    const handleCheckboxChange = async (index) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const updatedSidebarData = sidebarData.map((item, i) => {
+                if (i === index) {
+                    return { ...item, isComplete: item.isComplete === 1 ? 0 : 1 };
+                }
+                return item;
+            });
+
+            setSidebarData(updatedSidebarData);
+            console.log(updatedSidebarData);
+
+            const apiInstance = API();
+            const userId = getUserId();
+            try {
+                const requestPayload = {
+                    month: currentMonth,
+                    week: currentWeek,
+                    IsWeekList1: updatedSidebarData[0]?.isComplete || 0,
+                    IsWeekList2: updatedSidebarData[1]?.isComplete || 0,
+                    IsWeekList3: updatedSidebarData[2]?.isComplete || 0,
+                    IsWeekList4: updatedSidebarData[3]?.isComplete || 0,
+                    IsWeekList5: updatedSidebarData[4]?.isComplete || 0
+                };
+                console.log('Payload', requestPayload);
+
+                const response = await apiInstance.put(`/guide/savesidebar/${userId}`, requestPayload);
+
+                console.log('API Response', response.data);
+            } catch (error) {
+                console.error('Error saving checklist status:', error);
+            }
+        }
+    }; 
+    
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -123,11 +154,14 @@ function Header() {
                             <div className='w-5/6 mx-auto h-full'>
 
                                 <div className='info flex my-5 ml-2'>
-                                    <div className='profile_img h-[80px] w-[80px] mr-3.5 rounded-full border-[3px] border-[#A9D6BE]'></div>
-
-                                    <div className='flex'>
-                                        <div className='nickname my-auto mr-2'>{username}</div>
-                                    </div>
+                                    <Link to="/profile">
+                                        <div className='profile_img h-[80px] w-[80px] mr-3.5 rounded-full border-[3px] border-[#A9D6BE]'></div>
+                                    </Link>
+                                    <Link to="/profile">
+                                        <div className='flex h-full items-center'>
+                                            <div className='nickname my-auto mr-2'>{username}</div>
+                                        </div>
+                                    </Link>
                                 </div>
 
                                 <div className='bg-[#EEF9F3] w-full min-h-1/4 rounded-xl drop-shadow-lg mb-16'>
@@ -144,7 +178,9 @@ function Header() {
                                                         <label className="relative flex items-center mr-2 rounded-full cursor-pointer" htmlFor="customStyle">
                                                             <input
                                                                 type="checkbox"
-                                                                //checked={true}
+                                                                checked={item.isComplete === 1}
+                                                                onChange={() => handleCheckboxChange(index)}
+
                                                                 className="before:content[''] peer relative h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-[#C3E0D1] bg-white transition-all checked:border-[#C3E0D1] checked:bg-[#DDEEE5] hover:scale-105"
                                                             />
                                                             <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
