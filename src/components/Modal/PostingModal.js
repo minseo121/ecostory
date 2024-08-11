@@ -3,14 +3,33 @@ import ReactDOM from "react-dom";
 import ImageUploading from "react-images-uploading";
 import ImgCropModal from "../imgCrop/ImgCropModal.js";
 import { API, getUserId } from "../../api/API.js";
+import Resizer from "react-image-file-resizer";
 
 function PostingModal(props) {
-  const { modalClose, userName, userImage } = props;
+  const {
+    modalClose,
+    userName,
+    userImage,
+    id,
+    postImage,
+    postContent,
+    postEdit,
+    setPostEdit,
+  } = props;
 
   const [image, setImage] = useState([]);
   const [croppedImage, setCroppedImage] = useState(null);
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const [content, setContent] = useState("");
+  const [updateData, setUpdateData] = useState(null);
+
+  //렌더링 할때, 편집할 내용이 들어오면 변경해줌
+  useEffect(() => {
+    if (postEdit) {
+      setCroppedImage(postImage);
+      setContent(postContent);
+    }
+  }, []);
 
   const handleImageChange = (newImage) => {
     setImage(newImage);
@@ -27,46 +46,188 @@ function PostingModal(props) {
   const textAreaRef = useRef(null);
   useEffect(() => {
     const textArea = textAreaRef.current;
-    const cursorPosition = textArea.selectionStart; // 커서 위치 저장
-    textArea.style.height = "auto";
-    textArea.style.height = textArea.scrollHeight + "px";
-    // 커서 위치 복원
+    if (textArea) {
+      const cursorPosition = textArea.selectionStart; // 커서 위치 저장
+      textArea.style.height = "auto";
+      textArea.style.height = textArea.scrollHeight + "px";
+      // 커서 위치 복원
+    }
   }, [content]);
 
-  //게시 버튼 클릭 시 핸들러
-  const postSubmit = async () => {
-    const postData = {
-      post_Image: croppedImage,
-      content: content,
-    };
-    console.log("저장할 데이터:", postData);
+  // 이미지 리사이징 함수 수정
+  const resizeFile = async (imageData) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = imageData;
 
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const apiInstance = API();
-        const userId = getUserId();
-        const response = await apiInstance.post(
-          `/user/mypage/${userId}/post`,
-          postData
-        );
-        if (response) {
-          console.log("데이터 요청 성공:", response.data);
-          console.log(`요청 경로: /user/mypage/${userId}/post`);
+      img.onload = function () {
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 300;
+        const MAX_HEIGHT = 300;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
         } else {
-          console.log("토큰 유효하지 않음");
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            resolve(blob);
+          },
+          "image/jpeg",
+          0.9
+        );
+      };
+
+      img.onerror = function (error) {
+        reject(error);
+      };
+    });
+  };
+
+  // Blob을 Base64로 변환하는 함수
+  const blobToBase64 = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  // 수정 & 게시 버튼 클릭 시 핸들러
+  const postSubmit = async () => {
+    //게시글 수정 기능
+    if (postEdit) {
+      try {
+        // 원래 이미지에서 변경된 경우 base64 변환 처리
+        if (postImage !== croppedImage) {
+          const resizedImage = await resizeFile(croppedImage);
+          const base64Image = await blobToBase64(resizedImage);
+
+          setUpdateData({
+            post_Id: id,
+            post_Image: base64Image,
+            content: content,
+          });
+        } else {
+          setUpdateData({
+            post_Id: id,
+            post_Image: croppedImage,
+            content: content,
+          });
         }
       } catch (error) {
-        console.error(
-          "데이터 요청 실패:",
-          error.response ? error.response.data : error.message
-        );
+        console.error("이미지 리사이징 오류:", error);
+      }
+    } else {
+      //게시 기능
+      try {
+        console.log("Image:", croppedImage);
+        const resizedImage = await resizeFile(croppedImage);
+        console.log("Resized Image:", resizedImage);
+
+        // Blob을 Base64로 변환
+        const base64Image = await blobToBase64(resizedImage);
+
+        const postData = {
+          post_Image: base64Image,
+          content: content,
+        };
+        console.log("저장할 데이터:", postData);
+
+        const token = localStorage.getItem("token");
+
+        if (token) {
+          try {
+            const apiInstance = API();
+            const userId = getUserId();
+            console.log("userId:", userId); // userId 출력해서 확인
+            console.log(`요청 경로: /user/mypage/${userId}/post`);
+
+            const response = await apiInstance.post(
+              `/user/mypage/${userId}/post`,
+              postData
+            );
+            if (response) {
+              console.log("post 데이터 요청 성공:", response.data);
+              console.log(`요청 경로: /user/mypage/${userId}/post`);
+            } else {
+              console.log("응답이 없습니다.");
+            }
+          } catch (error) {
+            console.error(
+              "데이터 요청 실패:",
+              error.response ? error.response.data : error.message
+            );
+          }
+        } else {
+          console.log("토큰이 없습니다.");
+        }
+
+        modalClose(false);
+        document.body.style.overflow = "unset";
+      } catch (error) {
+        console.error("이미지 리사이징 오류:", error);
       }
     }
-
-    modalClose(false);
-    document.body.style.overflow = "unset";
   };
+
+  useEffect(() => {
+    const updatePost = async () => {
+      if (updateData) {
+        console.log("업데이트데이터", updateData);
+        const token = localStorage.getItem("token");
+
+        if (token) {
+          try {
+            const apiInstance = API();
+            const userId = getUserId();
+
+            const response = await apiInstance.put(
+              `/user/mypage/${userId}/update`,
+              updateData
+            );
+
+            if (response) {
+              console.log("수정 요청 성공:", response.data);
+              console.log(`수정 요청 경로: /user/mypage/${userId}/update`);
+            } else {
+              console.log("응답이 없습니다.");
+            }
+          } catch (error) {
+            console.error(
+              "수정 요청 실패:",
+              error.response ? error.response.data : error.message
+            );
+          }
+        } else {
+          console.log("토큰이 없습니다.");
+        }
+
+        modalClose(false);
+        setPostEdit(false);
+        document.body.style.overflow = "unset";
+      }
+    };
+
+    updatePost();
+  }, [updateData]);
 
   return ReactDOM.createPortal(
     <div>
@@ -106,11 +267,12 @@ function PostingModal(props) {
                   className="post_upload text-xl my-auto"
                   onClick={postSubmit}
                 >
-                  게시
+                  {postEdit ? "수정" : "게시"}
                 </button>
                 <button
                   className="modal_close text-2xl"
                   onClick={() => {
+                    setPostEdit(false);
                     modalClose(false);
                     document.body.style.overflow = "unset";
                   }}
@@ -140,7 +302,7 @@ function PostingModal(props) {
                     />
                   )}
                 </div>
-                <div className="nickname my-auto text-xl mr-2">{userName}</div>
+                <div className="username my-auto text-xl mr-2">{userName}</div>
               </div>
               <div className="devideline w-full my-4 border-2 border-[#A9D6C3]" />
               <div className="posting_content text-lg h-[435px] w-full mx-auto">
@@ -189,7 +351,7 @@ function PostingModal(props) {
                     className="post_upload float-right text-lg my-auto"
                     onClick={postSubmit}
                   >
-                    게시
+                    {postEdit ? "수정" : "게시"}
                   </button>
                 </div>
               </div>
@@ -244,7 +406,7 @@ function PostingModal(props) {
                     />
                   )}
                 </div>
-                <div className="nickname my-auto text-base mr-2">
+                <div className="username my-auto text-base mr-2">
                   {userName}
                 </div>
               </div>

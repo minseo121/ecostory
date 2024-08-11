@@ -2,18 +2,23 @@ import { useState, useEffect, useRef } from "react";
 import Header from "../components/Header/Header_AfterLogin";
 import Modal from "../components/Modal/PostModal";
 import PostingModal from "../components/Modal/PostingModal";
-//import { postData } from "../components/PostData.js";
 import { API, getUserId } from "../api/API.js";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
-  const [modalOpen, setModal] = useState(false);
+  const navigate = useNavigate();
+
+  const [modalOpen, setModalOpen] = useState(false);
   const [PostingModalOpen, setPostingModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedText, setSelectedText] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
   const [menuOpen, setMenuOpen] = useState(null);
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState(null);
   const [postData, setPostData] = useState([]);
+  const [guest, setGuest] = useState(false);
+  const [postEdit, setPostEdit] = useState(false);
 
   const menuRef = useRef(null);
 
@@ -21,6 +26,8 @@ function Profile() {
     const checkToken = async () => {
       const token = localStorage.getItem("token");
       if (token) {
+        setGuest(false);
+
         try {
           const apiInstance = API();
           const userId = getUserId();
@@ -28,15 +35,15 @@ function Profile() {
           if (response) {
             setUserName(response.data.user_name);
             setUserImage(response.data.user_image);
-            setPostData(response.data.post_Image || []);
+            setPostData(response.data.post || []);
 
             console.log("초기 데이터 요청 성공:", response.data);
             console.log(`요청 경로: /user/mypage/${userId}`);
             console.log(
-              `user: ${response.data.user_name} , image: ${response.data.user_image}, post: ${response.data.post_Image}`
+              `user: ${response.data.user_name} , image: ${response.data.user_image}, post: ${response.data.post || []}`
             );
           } else {
-            console.log("토큰 유효하지 않음");
+            console.log("response Error");
           }
         } catch (error) {
           console.error(
@@ -44,26 +51,25 @@ function Profile() {
             error.response ? error.response.data : error.message
           );
         }
+      } else {
+        setGuest(true);
+        console.log("token 유효하지 않음: 비회원");
       }
     };
 
     checkToken();
-  }, []);
+  }, [modalOpen, PostingModalOpen, postEdit]);
 
   const handleImageClick = (image) => {
-    setSelectedImage(image);
-    setSelectedText(findText(image.id));
-    setModal(true);
+    setSelectedImage(image.image);
+    setSelectedText(image.content);
+    setSelectedId(image.id);
+    setModalOpen(true);
     document.body.style.overflow = "hidden";
   };
 
   const handleMenuClick = (id) => {
     setMenuOpen(menuOpen === id ? null : id);
-  };
-
-  const findText = (id) => {
-    const content = postData.find((content) => content.id === id);
-    return content ? content.text : "";
   };
 
   const handleClickOutside = (event) => {
@@ -72,12 +78,38 @@ function Profile() {
     }
   };
 
+  const handleShare = (post) => {
+    setMenuOpen(null);
+
+    const postData = {
+      id: post.id,
+      image: post.image,
+      text: post.content,
+      userName,
+      userImage,
+    };
+    const encodedData = encodeURIComponent(JSON.stringify(postData));
+    const shareUrl = `${window.location.origin}/sharedpost?data=${encodedData}`;
+
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      alert("공유 링크가 클립보드에 복사되었습니다.");
+    });
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // postEdit 값이 true일 때 PostingModal 열기
+  useEffect(() => {
+    if (postEdit) {
+      setPostingModal(true);
+      document.body.style.overflow = "hidden";
+    }
+  }, [postEdit]);
 
   return (
     <div>
@@ -118,6 +150,11 @@ function Profile() {
                     modalClose={setPostingModal}
                     userName={userName}
                     userImage={userImage}
+                    id={selectedId}
+                    postImage={selectedImage}
+                    postContent={selectedText}
+                    postEdit={postEdit}
+                    setPostEdit={setPostEdit}
                   />
                 ) : null}
                 <div className="title1">내 게시글</div>
@@ -139,26 +176,33 @@ function Profile() {
               <div className="post_container mx-2 my-2 sm:mx-[10px] sm:my-[10px] grid grid-cols-3 gap-x-1 gap-y-1 sm:gap-x-2 sm:gap-y-2 justify-items-center">
                 {modalOpen && selectedImage && (
                   <Modal
+                    id={selectedId}
                     image={selectedImage}
                     text={selectedText}
-                    modalClose={setModal}
+                    modalClose={setModalOpen}
+                    postEdit={setPostEdit}
+                    userName={userName}
+                    userImage={userImage}
+                    guest={guest}
                   />
                 )}
 
-                {postData.map((image) => (
-                  <div key={image.id} className="relative">
-                    <button onClick={() => handleImageClick(image)}>
-                      <img
-                        className="aspect-square object-cover"
-                        alt="post"
-                        src={image.src}
-                      />
+                {postData.map((post) => (
+                  <div key={post.id} className="relative">
+                    <button onClick={() => handleImageClick(post)}>
+                      <div className="max-w-[320px] max-h-[320px] overflow-hidden flex items-center justify-center">
+                        <img
+                          className="w-[320px] h-full aspect-square object-cover"
+                          alt="post"
+                          src={post.image}
+                        />
+                      </div>
                     </button>
                     <div className="absolute top-0 right-0 pt-2">
-                      <button onClick={() => handleMenuClick(image.id)}>
+                      <button onClick={() => handleMenuClick(post.id)}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 sm:h-8 sm:w-8 text-white"
+                          className="h-6 w-6 sm:h-8 sm:w-8 text-[#61D2A2]"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -171,17 +215,14 @@ function Profile() {
                           />
                         </svg>
                       </button>
-                      {menuOpen === image.id && (
+                      {menuOpen === post.id && (
                         <div
                           ref={menuRef}
-                          className="absolute top-6 right-0 bg-white border rounded shadow-lg z-10"
+                          className="absolute top-10 right-2 shadow-lg z-10"
                         >
                           <button
-                            className="block h-12 w-24 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => {
-                              alert("공유하기");
-                              setMenuOpen(null);
-                            }}
+                            className="block h-12 w-24 px-4 py-2 text-sm rounded-md text-white bg-[#61D2A2] hover:bg-[#53B68C]"
+                            onClick={() => handleShare(post)}
                           >
                             공유하기
                           </button>
