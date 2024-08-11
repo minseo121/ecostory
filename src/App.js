@@ -15,7 +15,7 @@ import PlanMain from "./pages/PlanMain";
 import SharedPost from "./components/SharedPost";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   useEffect(() => {
     const checkToken = async () => {
