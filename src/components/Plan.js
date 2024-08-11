@@ -175,7 +175,7 @@ const Plan = () => {
 
   return (
     <div className="flex-1 mt-24 sm:ml-64 sm:m-10 text-[#498D80] w-screen sm:mt-24 mb-16 max-w-screen-xl mx-auto">
-      <div>
+      <div className='sm:mx-0 mx-5'>
         <p className="text-2xl">
           이번 달 <span className="text-[#61D2A2]">실천 계획</span>
         </p>
