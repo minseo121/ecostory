@@ -13,8 +13,8 @@ function SuccessList({ successItems }) {
         <div>
             {successItems.map((item, index) => (
                 <div>
-                <div className="inline-flex items-center" key={index}>
-                    <label className="relative flex items-center py-5 px-10 rounded-full cursor-pointer" htmlFor={`success-${index}`}>
+                <div className="inline-flex items-center mx-3" key={index}>
+                    <label className="relative flex items-center py-5 px-3 sm:px-10 rounded-full cursor-pointer" htmlFor={`success-${index}`}>
                         <div className="p-2 rounded-full bg-[#C3E0D1]">
                             <svg width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect width="2.29435" height="10.5999" rx="1.14718" transform="matrix(0.625533 -0.780197 0.664631 0.747171 0.404114 5.29053)" fill="white" />
@@ -38,8 +38,8 @@ function FailList({ failItems }) {
         <div>
             {failItems.map((item, index) => (
                 <div>
-                <div className="inline-flex items-center" key={index}>
-                    <label className="relative flex items-center py-5 px-10 rounded-full cursor-pointer" htmlFor={`fail-${index}`}>
+                <div className="inline-flex items-center mx-3" key={index}>
+                    <label className="relative flex items-center py-5 px-3 sm:px-10 rounded-full cursor-pointer" htmlFor={`fail-${index}`}>
                         <div className="p-2 rounded-full bg-[#8E8E8E]">
                             <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect width="2.40085" height="16.8834" rx="1.20042" transform="matrix(0.61212 0.790765 -0.654556 0.756014 11.9485 0)" fill="white" />
@@ -103,9 +103,9 @@ const Checklist = () => {
                     {weekData.map((week, index) => (
                         <div key={index} className='mb-10'>
                             <div className='sm:flex sm:justify-between w-full'>
-                                <p className='text-xl text-[#498D80]'>{week.WeekNumber}주차</p>
+                                <p className='text-lg sm:text-xl text-[#498D80]'>{week.WeekNumber}주차</p>
                                 <div className='flex max-[640px]:w-full max-[640px]:justify-center max-[640px]:mt-3'>
-                                    <p className='text-[#7BB49C] sm:text-lg'>성공률</p>
+                                    <p className='text-[#7BB49C] text-sm sm:text-lg'>성공률</p>
                                     <div className='w-2/3 sm:w-72 rounded-xl bg-[#C3E0D1] m-1 mx-2'>
                                         <div className='bg-[#61D2A2] h-full rounded-xl' style={{ width: `${week.rate}%` }}></div>
                                     </div>
@@ -114,13 +114,13 @@ const Checklist = () => {
                             </div>
                             <div className='sm:flex sm:justify-between sm:mt-10 mt-5'>
                                 <div className='bg-[#A9D6BE] sm:w-1/2 sm:mr-5 p-2 rounded-xl max-[640px]:mb-5'>
-                                    <p className='p-2 text-lg text-white pt-4 pl-4'>성공목록</p>
+                                    <p className='p-2 text-base sm:text-lg text-white pt-4 pl-4'>성공목록</p>
                                     <div className='Successlist w-full bg-white my-2 rounded-xl overflow-y-auto h-48'>
                                         <SuccessList successItems={week.success} />
                                     </div>
                                 </div>
                                 <div className='bg-[#ADADAD] sm:w-1/2 sm:ml-5 p-2 rounded-xl'>
-                                    <p className='p-2 text-lg text-white pt-4 pl-4'>실패목록</p>
+                                    <p className='p-2 text-base sm:text-lg text-white pt-4 pl-4'>실패목록</p>
                                     <div className='faillist w-full bg-white my-2 rounded-xl overflow-y-auto h-48'>
                                         <FailList failItems={week.fail} />
                                     </div>
