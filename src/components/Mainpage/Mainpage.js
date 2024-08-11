@@ -25,7 +25,9 @@ function Mainpage() {
                     </div>
                     {isSmallScreen && <br/>}
                     <div className="title_content2 bg-[#E2F8F6] h-12 rounded-xl sm:flex flex-1 flex items-center max-[640px]:mx-3">
-                        <span className="text-[#498D80] flex items-center text-start text-sm sm:text-md my-auto ml-[3%]">오염도 기준 :</span>
+                        <span className="text-[#498D80] flex items-center text-start text-sm sm:text-md my-auto ml-[3%]">
+                            오염도 기준 : 온실가스 배출량 + 음식물 쓰레기 + 대기질 데이터로 계산되었습니다.
+                        </span>
                     </div>
                 </div>
                 <Kmap/>
