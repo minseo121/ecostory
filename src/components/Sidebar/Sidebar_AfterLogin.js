@@ -56,13 +56,13 @@ function Sidebar() {
 
         const fetchData = async () => {
             const token = localStorage.getItem('token');
-            if(token){
+            if (token) {
                 try {
                     const apiInstance = API();
                     const userId = getUserId();
                     const response = await apiInstance.post(`/checklist/show/${userId}`, {
                         month: 5,
-                        WeekNumber: currentWeek 
+                        WeekNumber: currentWeek
                     });
                     const currentWeekData = response.data.filter(item => item.WeekNumber === currentWeek);
                     setWeekData(currentWeekData);
@@ -110,7 +110,7 @@ function Sidebar() {
         };
 
         checkToken();
-    }, [currentMonth, currentWeek]); 
+    }, [currentMonth, currentWeek]);
 
     const handleCheckboxChange = async (index) => { //체크하면 넘어가서 저장되는 API
         const token = localStorage.getItem('token');
@@ -138,9 +138,9 @@ function Sidebar() {
                     IsWeekList5: updatedSidebarData[4]?.isComplete || 0
                 };
                 console.log('넣은 값', requestPayload);
-    
+
                 const response = await apiInstance.put(`/guide/savesidebar/${userId}`, requestPayload);
-    
+
                 console.log('API 대답', response.data);
             } catch (error) {
                 console.error('체크리스트 상태 저장 중 에러 발생:', error);
@@ -153,15 +153,16 @@ function Sidebar() {
             <div className='hidden sm:block'>
                 <div className="sidebar_row bg-[#D3E7DD] w-[220px] h-full pt-14 fixed z-20">
                     <div className='h-[5%]' />
-
-                    <div className="profile_frame bg-[#EDF8F3] h-1/4 w-5/6 drop-shadow-md rounded-3xl relative flex mx-auto">
-                        <div className="profile_content flex-1">
-                            <div className="profile_img bg-white h-2/3 w-2/3 rounded-full mx-auto mt-2"></div>
-                            <div className="profile_info flex justify-center mt-[5%]">
-                                <div className="nickname text-[#589B7F] text-lg mr-1.5">{username}</div>
+                    <Link to="/profile">
+                        <div className="profile_frame bg-[#EDF8F3] h-1/4 w-5/6 drop-shadow-md rounded-3xl relative flex mx-auto">
+                            <div className="profile_content flex-1">
+                                <div className="profile_img bg-white h-2/3 w-2/3 rounded-full mx-auto mt-2"></div>
+                                <div className="profile_info flex justify-center mt-[5%]">
+                                    <div className="nickname text-[#589B7F] text-lg mr-1.5">{username}</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
 
                     <div className='h-[5%]' />
 
@@ -202,7 +203,7 @@ function Sidebar() {
                                 <p>이번주 성공률</p>
                                 <div className='flex items-center'>
                                     <div className='w-full h-2 rounded-xl bg-[#C3E0D1]'>
-                                    <div className='bg-[#61D2A2] h-full rounded-xl' style={{ width: `${weekData[0]?.rate || 0}%` }}></div>
+                                        <div className='bg-[#61D2A2] h-full rounded-xl' style={{ width: `${weekData[0]?.rate || 0}%` }}></div>
                                     </div>
                                     <div className='ml-2'>{weekData[0]?.rate || 0}%</div>
                                 </div>
