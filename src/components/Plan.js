@@ -101,7 +101,7 @@ const Plan = () => {
           const apiInstance = API();
           const userId = getUserId();
           const checklistResponse = await apiInstance.post(`/guide/checklist/${userId}`, {
-            month: 5,
+            month: currentMonth,
           });
           if (checklistResponse.data === '체크리스트가 비었습니다. 새로 만들어주세요') {
             alert('체크리스트가 비어있습니다. 가이드북 페이지로 이동합니다.');
@@ -145,7 +145,7 @@ const Plan = () => {
     console.log('사실 함수는 잘 가고있었죠?');
     const userId = getUserId();
     const deleteData = {
-      month: 5, //확인하려면 데이터가 들어있는 5월달로
+      month: currentMonth, //확인하려면 데이터가 들어있는 5월달로
       list: checkedItems.map(item => ({
         week: item.week,
         guide_Id: item.id,
@@ -159,7 +159,7 @@ const Plan = () => {
       await apiInstance.delete(`/guide/delete/${userId}`, { data: deleteData });
 
       const checklistResponse = await apiInstance.post(`/guide/checklist/${userId}`, {
-        month: 5, //확인하려면 데이터가 들어있는 5월달로
+        month: currentMonth, //확인하려면 데이터가 들어있는 5월달로
       });
 
       if (checklistResponse.status === 200) {

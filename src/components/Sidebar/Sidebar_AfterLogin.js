@@ -61,7 +61,7 @@ function Sidebar() {
                     const apiInstance = API();
                     const userId = getUserId();
                     const response = await apiInstance.post(`/checklist/show/${userId}`, {
-                        month: 5,
+                        month: currentMonth,
                         WeekNumber: currentWeek
                     });
                     const currentWeekData = response.data.filter(item => item.WeekNumber === currentWeek);
@@ -86,7 +86,7 @@ function Sidebar() {
                     const apiInstance = API();
                     const userId = getUserId();
                     const sidebarResponse = await apiInstance.post(`/guide/sidebar/${userId}`, {
-                        month: 5,
+                        month: currentMonth,
                         week: currentWeek
                     });
                     const weekLists = [
@@ -129,7 +129,7 @@ function Sidebar() {
             const userId = getUserId();
             try {
                 const requestPayload = {
-                    month: 5,
+                    month: currentMonth,
                     week: currentWeek,
                     IsWeekList1: updatedSidebarData[0]?.isComplete || 0,
                     IsWeekList2: updatedSidebarData[1]?.isComplete || 0,

@@ -83,7 +83,7 @@ const Checklist = () => {
                     const apiInstance = API();
                     const userId = getUserId();
                     const response = await apiInstance.post(`/checklist/show/${userId}`, {
-                        month: 5,
+                        month: currentMonth,
                         WeekNumber: currentWeek 
                     });
                     setWeekData(response.data);
