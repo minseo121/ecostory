@@ -43,7 +43,6 @@ function App() {
   }, []);
 
   return (
-    <Router>
       <Routes>
         <Route
           path="/"
@@ -59,7 +58,6 @@ function App() {
         <Route path="/plan" element={<PlanMain />} />
         <Route path="/sharedpost" element={<SharedPost />} />
       </Routes>
-    </Router>
   );
 }
 
