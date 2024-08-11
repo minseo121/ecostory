@@ -3,11 +3,9 @@ import Header from "../components/Header/Header_AfterLogin";
 import Modal from "../components/Modal/PostModal";
 import PostingModal from "../components/Modal/PostingModal";
 import { API, getUserId } from "../api/API.js";
-import { useNavigate } from "react-router-dom";
+import pako from "pako";
 
 function Profile() {
-  const navigate = useNavigate();
-
   const [modalOpen, setModalOpen] = useState(false);
   const [PostingModalOpen, setPostingModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -88,8 +86,26 @@ function Profile() {
       userName,
       userImage,
     };
-    const encodedData = encodeURIComponent(JSON.stringify(postData));
-    const shareUrl = `${window.location.origin}/sharedpost?data=${encodedData}`;
+
+    // 데이터를 JSON 문자열로 변환
+    const jsonString = JSON.stringify(postData);
+
+    // 문자열을 UTF-8 인코딩된 Uint8Array로 변환
+    const uint8Array = new TextEncoder().encode(jsonString);
+
+    // 데이터 압축
+    const compressedData = pako.deflate(uint8Array);
+
+    // 압축된 데이터를 Base64로 인코딩
+    const base64Encoded = btoa(String.fromCharCode.apply(null, compressedData));
+
+    // URL에 안전한 형식으로 인코딩
+    const urlSafeEncoded = base64Encoded
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+
+    const shareUrl = `${window.location.origin}/sharedpost/useId/postId`;
 
     navigator.clipboard.writeText(shareUrl).then(() => {
       alert("공유 링크가 클립보드에 복사되었습니다.");
@@ -141,7 +157,7 @@ function Profile() {
           </div>
         </div>
 
-        <div className="post_container mx-[5%] md:mx-[7%] lg:mx-[15%] my-[40px]">
+        <div className="post_container mx-[5%] md:mx-[7%] lg:mx-[20%] my-[40px]">
           <div className="post_frame rounded-lg border-4 border-[#61D2A2]">
             <div className="post_title h-[50px] bg-[#61D2A2] text-white text-base sm:text-lg md:text-xl">
               <div className="h-full flex justify-start items-center mx-[20px]">

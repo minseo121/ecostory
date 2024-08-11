@@ -3,6 +3,7 @@ import "../../css/Main.css";
 import axios from "axios";
 import Loading from "../animation/animation.js";
 import { API, getUserId } from "../../api/API.js";
+import { useNavigate } from "react-router-dom";
 
 function GuideContent({ guideName, guideId, isChecked, handleCheck }) {
   return (
@@ -44,6 +45,8 @@ function GuideContent({ guideName, guideId, isChecked, handleCheck }) {
 }
 
 function GuideBook() {
+  const navigate = useNavigate();
+
   const [categories, setCategories] = useState([]);
   const [guideBookList, setGuideBookList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -290,6 +293,9 @@ function GuideBook() {
           console.log("전송 데이터: ", checklistData);
           console.log("데이터 요청 성공:", response.data);
           console.log(`요청 경로: /guide/makeplan/${userId}`);
+
+          alert("이번 달 목표에 추가했습니다.");
+          navigate("/plan");
         } else {
           console.log("토큰 유효하지 않음");
         }
