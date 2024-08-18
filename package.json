@@ -28,8 +28,6 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://minseo121.github.io/ecostory",
-
   "eslintConfig": {
     "extends": [
       "react-app",
