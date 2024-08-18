@@ -143,7 +143,7 @@ function Profile() {
 
     setMenuOpen(null);
 
-    const shareUrl = `${window.location.origin}/ecostory/share/${userId}/${post.id}`;
+    const shareUrl = `${window.location.origin}/share/${userId}/${post.id}`;
 
     navigator.clipboard.writeText(shareUrl).then(() => {
       alert("공유 링크가 클립보드에 복사되었습니다.");
