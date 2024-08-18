@@ -43,21 +43,23 @@ function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={isLoggedIn ? <Main_AfterLogin /> : <Main_BeforeLogin />}
-      />
-      <Route path="/map" element={<Map />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/modal" element={<Modal />} />
-      <Route path="/checkliststate" element={<ChecklistState />} />
-      <Route path="/guide" element={<Guide />} />
-      <Route path="/plan" element={<PlanMain />} />
-      <Route path="/share/:userId/:postId" element={<SharedPage />} />
-    </Routes>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={isLoggedIn ? <Main_AfterLogin /> : <Main_BeforeLogin />}
+        />
+        <Route path="/map" element={<Map />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/modal" element={<Modal />} />
+        <Route path="/checkliststate" element={<ChecklistState />} />
+        <Route path="/guide" element={<Guide />} />
+        <Route path="/plan" element={<PlanMain />} />
+        <Route path="/share/:userId/:postId" element={<SharedPage />} />
+      </Routes>
+    </Router>
   );
 }
 
