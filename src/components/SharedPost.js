@@ -45,11 +45,11 @@ function SharedPost() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-56px)] bg-white overflow-x-hidden overflow-y-auto pt-0 lg:flex-row lg:mx-[5%] sm:pt-32 lg:pt-0">
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-56px)] bg-white overflow-x-hidden overflow-y-auto pt-0 lg:flex-row lg:mx-[5%]">
         <img
           src={postData.image}
           alt="post-image"
-          className="w-5/6 sm:w-3/5 md:w-1/2 lg:w-2/5 xl:w-1/3 rounded-lg border-4 border-[#A9D6BE]"
+          className="w-5/6 sm:w-3/5 md:w-1/2 lg:w-2/5 xl:w-1/3 rounded-lg border-4 border-[#A9D6BE] mt-9 lg:mt-0"
         />
 
         <div className="flex flex-col w-5/6 sm:w-3/5 md:w-1/2 lg:w-2/5 xl:w-1/3 text-[#589B7F] mt-10 lg:ml-16">
