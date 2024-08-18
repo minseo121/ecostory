@@ -136,7 +136,7 @@ function Modal(props) {
                 <div className="username my-auto text-xl mr-2">{userName}</div>
               </div>
               <div className="devideline w-full my-4 border-2 border-[#A9D6C3]" />
-              <div className="post_content overflow-y-auto text-lg h-[455px] w-full mx-auto">
+              <div className="post_content overflow-y-auto text-lg h-[440px] w-full mx-auto">
                 {text.split("\n").map((line) => {
                   return (
                     <>
