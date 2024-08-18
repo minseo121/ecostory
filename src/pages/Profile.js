@@ -140,14 +140,53 @@ function Profile() {
 
   const handleShare = (post) => {
     const userId = getUserId();
-
     setMenuOpen(null);
-
     const shareUrl = `${window.location.origin}/share/${userId}/${post.id}`;
 
-    navigator.clipboard.writeText(shareUrl).then(() => {
-      alert("공유 링크가 클립보드에 복사되었습니다.");
-    });
+    // 임시 텍스트 영역 생성
+    const tempTextArea = document.createElement("textarea");
+    tempTextArea.value = shareUrl;
+    document.body.appendChild(tempTextArea);
+
+    // 텍스트 선택 및 복사
+    tempTextArea.select();
+
+    try {
+      // 먼저 최신 API 사용 시도
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(shareUrl)
+          .then(() => {
+            alert("공유 링크가 클립보드에 복사되었습니다.");
+          })
+          .catch((err) => {
+            console.error("클립보드 복사 실패:", err);
+            document.execCommand("copy");
+            alert("공유 링크가 클립보드에 복사되었습니다.");
+          });
+      } else {
+        // 구형 방식으로 폴백
+        const successful = document.execCommand("copy");
+        if (successful) {
+          alert("공유 링크가 클립보드에 복사되었습니다.");
+        } else {
+          console.error("클립보드 복사 실패");
+          alert(
+            "클립보드 복사에 실패했습니다. 수동으로 링크를 복사해주세요: " +
+              shareUrl
+          );
+        }
+      }
+    } catch (err) {
+      console.error("클립보드 복사 실패:", err);
+      alert(
+        "클립보드 복사에 실패했습니다. 수동으로 링크를 복사해주세요: " +
+          shareUrl
+      );
+    }
+
+    // 임시 텍스트 영역 제거
+    document.body.removeChild(tempTextArea);
   };
 
   const handleUpdateProfile = () => {
