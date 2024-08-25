@@ -174,14 +174,14 @@ const Plan = () => {
   };
 
   return (
-    <div className="flex-1 mt-24 sm:ml-64 sm:m-10 text-[#498D80] w-screen sm:mt-24 mb-16 max-w-screen-xl mx-auto">
+    <div className="flex-1 mt-24 sm:px-0 px-6 sm:ml-64 sm:m-10 text-[#498D80] w-screen sm:mt-24 mb-16 max-w-screen-xl mx-auto">
       <div className='sm:mx-0 mx-5'>
         <p className="text-2xl">
           이번 달 <span className="text-[#61D2A2]">실천 계획</span>
         </p>
         <p className="my-2">삭제하고 싶은 목록을 체크 후 등록 시, 해당 목록이 삭제된 후 적용됩니다</p>
       </div>
-      <div className="grid grid-cols-1 m-2 mt-8 gap-10 md:grid-cols-3">
+      <div className="grid grid-cols-1 m-2 mt-8 gap-10 sm:grid-cols-3">
         {allWeekData.map((weekData, index) => (
           <PlanList
             key={index}

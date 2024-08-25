@@ -26,7 +26,7 @@ function Mainpage() {
                     {isSmallScreen && <br/>}
                     <div className="title_content2 bg-[#E2F8F6] h-12 rounded-xl sm:flex flex-1 flex items-center max-[640px]:mx-3">
                         <span className="text-[#498D80] flex items-center text-start text-sm sm:text-md my-auto ml-[3%]">
-                            오염도 기준 : 온실가스 배출량 + 음식물 쓰레기 + 대기질 데이터로 계산되었습니다.
+                            오염도 기준 - 빨강 : 매우 심각 / 주황 : 심각 / 노랑 : 낮음 / 초록 : 매우 낮음
                         </span>
                     </div>
                 </div>
